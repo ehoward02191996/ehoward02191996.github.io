@@ -5,36 +5,112 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>John Smith - IT 4403</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 0.1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(1.1); }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 8s infinite;
+        }
+    </style>
 </head>
-<body class="min-h-screen bg-black text-white">
+<body class="bg-black text-white min-h-screen font-sans selection:bg-cyan-500/30">
 
     <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute top-20 left-20 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse"></div>
-        <div class="absolute bottom-20 right-20 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[120px] animate-pulse-slow"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[120px] animate-pulse-slow" style="animation-delay: 2s;"></div>
     </div>
 
     <div class="relative z-10">
-        <header class="border-b border-cyan-500/30 py-8 backdrop-blur-sm bg-black/50">
+        <header class="border-b border-cyan-500/30 py-10 backdrop-blur-md bg-black/40">
             <div class="max-w-4xl mx-auto px-6">
-                <h1 class="text-5xl font-bold text-cyan-400 mb-3">John Smith</h1>
-                <p class="text-xl text-cyan-300/90">Student, Department of Information Technology</p>
-                <p class="text-lg text-gray-400">College of Computing and Software Engineering (CCSE)</p>
+                <h1 class="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent mb-4">
+                    John Smith
+                </h1>
+                <p class="text-xl md:text-2xl text-cyan-300/90 font-medium">
+                    Student, Department of Information Technology
+                </p>
+                <p class="text-lg text-gray-400 mt-1">
+                    College of Computing and Software Engineering (CCSE)
+                </p>
             </div>
         </header>
 
-        <main class="max-w-4xl mx-auto px-6 py-12">
-            <section class="bg-gray-900/80 border border-cyan-500/30 rounded-2xl p-8 mb-8">
-                <h2 class="text-3xl font-bold text-cyan-400 mb-4">About This Site</h2>
-                <p class="text-gray-300">Welcome to my course project website. This site serves as a portfolio and showcase for the work completed throughout the semester.</p>
+        <main class="max-w-4xl mx-auto px-6 py-12 space-y-8">
+            
+            <section class="bg-gradient-to-br from-gray-900/80 to-gray-800/40 backdrop-blur-xl border border-cyan-500/30 rounded-3xl p-8 shadow-2xl shadow-cyan-500/5">
+                <h2 class="text-3xl font-bold text-cyan-400 mb-4 flex items-center gap-3">
+                    <span class="w-1.5 h-8 bg-gradient-to-b from-cyan-400 to-blue-600 rounded-full"></span>
+                    About This Site
+                </h2>
+                <p class="text-gray-300 text-lg leading-relaxed">
+                    Welcome to my course project website. This site serves as a portfolio and showcase for the work completed throughout the semester. Here you will find various exercises, laboratory assignments, and projects demonstrating web and mobile application development concepts.
+                </p>
             </section>
 
-            <section class="bg-gray-900/80 border border-purple-500/30 rounded-2xl p-8 mb-8">
-                <h2 class="text-3xl font-bold text-purple-400 mb-4">Course Information</h2>
-                <p class="text-gray-300"><strong>Course Code:</strong> IT 4403</p>
-                <p class="text-gray-300"><strong>Course Title:</strong> Advanced Web and Mobile Applications</p>
+            <section class="bg-gradient-to-br from-gray-900/80 to-gray-800/40 backdrop-blur-xl border border-purple-500/30 rounded-3xl p-8 shadow-2xl shadow-purple-500/5">
+                <h2 class="text-3xl font-bold text-purple-400 mb-4 flex items-center gap-3">
+                    <span class="w-1.5 h-8 bg-gradient-to-b from-purple-400 to-pink-600 rounded-full"></span>
+                    Course Information
+                </h2>
+                <div class="space-y-2 text-lg">
+                    <p><span class="text-purple-300 font-semibold">Course Code:</span> IT 4403</p>
+                    <p><span class="text-purple-300 font-semibold">Course Title:</span> Advanced Web and Mobile Applications</p>
+                </div>
             </section>
+
+            <section class="bg-gradient-to-br from-gray-900/80 to-gray-800/40 backdrop-blur-xl border border-blue-500/30 rounded-3xl p-8 shadow-2xl shadow-blue-500/5">
+                <h2 class="text-3xl font-bold text-blue-400 mb-8 flex items-center gap-3">
+                    <span class="w-1.5 h-8 bg-gradient-to-b from-blue-400 to-cyan-600 rounded-full"></span>
+                    Course Work
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <a href="exercises.html" class="group relative p-6 bg-cyan-950/20 border border-cyan-500/30 rounded-2xl hover:bg-cyan-900/40 transition-all duration-300">
+                        <div class="flex items-center gap-4">
+                            <div class="p-3 bg-cyan-500/20 rounded-lg text-cyan-400 group-hover:scale-110 transition-transform">
+                                📚
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-cyan-300 text-xl">Exercises</h3>
+                                <p class="text-sm text-gray-400">View course exercises</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="labs.html" class="group relative p-6 bg-purple-950/20 border border-purple-500/30 rounded-2xl hover:bg-purple-900/40 transition-all duration-300">
+                        <div class="flex items-center gap-4">
+                            <div class="p-3 bg-purple-500/20 rounded-lg text-purple-400 group-hover:scale-110 transition-transform">
+                                🧪
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-purple-300 text-xl">Lab Work</h3>
+                                <p class="text-sm text-gray-400">View laboratory assignments</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <section class="bg-gradient-to-br from-gray-900/80 to-gray-800/40 backdrop-blur-xl border border-green-500/30 rounded-3xl p-8">
+                <h2 class="text-3xl font-bold text-green-400 mb-4 flex items-center gap-3">
+                    <span class="w-1.5 h-8 bg-gradient-to-b from-green-400 to-emerald-600 rounded-full"></span>
+                    Related Links
+                </h2>
+                <a href="https://www.kennesaw.edu/ccse/information-technology/" target="_blank" class="text-green-400 hover:text-green-300 flex items-center gap-2 group underline-offset-4 hover:underline">
+                    CCSE Department of IT Website ↗
+                </a>
+            </section>
+
+            <div class="bg-orange-500/10 border border-orange-500/40 rounded-2xl p-6">
+                <h3 class="text-orange-400 font-bold mb-2 flex items-center gap-2">⚠️ Disclaimer</h3>
+                <p class="text-sm text-gray-400">This is a student website created for course projects in IT 4403. Content is for educational purposes only.</p>
+            </div>
         </main>
+
+        <footer class="py-10 text-center text-gray-500 border-t border-white/5 mt-10">
+            <p>© 2026 IT 4403 Course Project</p>
+        </footer>
     </div>
 </body>
 </html>

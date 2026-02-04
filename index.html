@@ -1,17 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Figma Site</title>
+    <title>John Smith - IT 4403</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="min-h-screen bg-black text-white">
 
-    <div class="figma-layout">
-        <h1>Your Figma Title</h1>
-        <p>Your Figma content goes here.</p>
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-20 left-20 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-20 right-20 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
     </div>
 
+    <div class="relative z-10">
+        <header class="border-b border-cyan-500/30 py-8 backdrop-blur-sm bg-black/50">
+            <div class="max-w-4xl mx-auto px-6">
+                <h1 class="text-5xl font-bold text-cyan-400 mb-3">John Smith</h1>
+                <p class="text-xl text-cyan-300/90">Student, Department of Information Technology</p>
+                <p class="text-lg text-gray-400">College of Computing and Software Engineering (CCSE)</p>
+            </div>
+        </header>
+
+        <main class="max-w-4xl mx-auto px-6 py-12">
+            <section class="bg-gray-900/80 border border-cyan-500/30 rounded-2xl p-8 mb-8">
+                <h2 class="text-3xl font-bold text-cyan-400 mb-4">About This Site</h2>
+                <p class="text-gray-300">Welcome to my course project website. This site serves as a portfolio and showcase for the work completed throughout the semester.</p>
+            </section>
+
+            <section class="bg-gray-900/80 border border-purple-500/30 rounded-2xl p-8 mb-8">
+                <h2 class="text-3xl font-bold text-purple-400 mb-4">Course Information</h2>
+                <p class="text-gray-300"><strong>Course Code:</strong> IT 4403</p>
+                <p class="text-gray-300"><strong>Course Title:</strong> Advanced Web and Mobile Applications</p>
+            </section>
+        </main>
+    </div>
 </body>
 </html>

@@ -42,7 +42,7 @@
         "authors": ["Jennifer Robbins"],
         "publisher": "O'Reilly Media",
         "publishedDate": "2018-05-11",
-        "description": "Do you want to build web pages but have no prior experience? This friendly guide is the perfect place to start. You’ll begin at square one, learning how the web and web pages work, and then steadily build from there.",
+        "description": "Do you want to build web pages but have no prior experience? This friendly guide is the perfect place to start. You will begin at square one, learning how the web and web pages work, and then steadily build from there.",
         "pageCount": 808,
         "imageLinks": {
           "thumbnail": "https://books.google.com/books/content?id=OP1sDwAAQBAJ&printsec=frontcover&img=1&zoom=1"
@@ -90,7 +90,7 @@
         "authors": ["Ben Frain"],
         "publisher": "Packt Publishing Ltd",
         "publishedDate": "2020-04-30",
-        "description": "Publisher's note: To make use of the most recent CSS and HTML features, a new, fully revised fourth edition of this book is now available, updated for 2022.",
+        "description": "Publisher note: To make use of the most recent CSS and HTML features, a new, fully revised fourth edition of this book is now available, updated for 2022.",
         "pageCount": 434,
         "imageLinks": {
           "thumbnail": "https://books.google.com/books/content?id=PT1wDwAAQBAJ&printsec=frontcover&img=1&zoom=1"
@@ -107,4 +107,60 @@
         "publisher": "John Wiley & Sons",
         "publishedDate": "2012-08-14",
         "description": "Learn to make more efficient apps, with just one language! Smashing Node.js: JavaScript Everywhere equips you with the necessary tools to understand Node.js and its uses in developing efficient, scalable web applications.",
-        "pageCount": 3
+        "pageCount": 312,
+        "imageLinks": {
+          "thumbnail": "https://books.google.com/books/content?id=8Gz4AgAAQBAJ&printsec=frontcover&img=1&zoom=1"
+        },
+        "previewLink": "https://play.google.com/books/reader?id=8Gz4AgAAQBAJ"
+      }
+    },
+    {
+      "id": "9H6xDwAAQBAJ",
+      "volumeInfo": {
+        "title": "CSS: The Missing Manual",
+        "subtitle": "Beautiful styling for the web",
+        "authors": ["David Sawyer McFarland"],
+        "publisher": "O'Reilly Media",
+        "publishedDate": "2015-08-13",
+        "description": "CSS lets you create professional-looking websites, but learning its finer points can be tricky. This fully updated edition provides the most modern and effective tips, tricks, and tutorial-based instruction.",
+        "pageCount": 718,
+        "imageLinks": {
+          "thumbnail": "https://books.google.com/books/content?id=9H6xDwAAQBAJ&printsec=frontcover&img=1&zoom=1"
+        },
+        "previewLink": "https://play.google.com/books/reader?id=9H6xDwAAQBAJ"
+      }
+    },
+    {
+      "id": "N1GMAgAAQBAJ",
+      "volumeInfo": {
+        "title": "High Performance Web Sites",
+        "subtitle": "Essential Knowledge for Front-End Engineers",
+        "authors": ["Steve Souders"],
+        "publisher": "O'Reilly Media",
+        "publishedDate": "2007-09-11",
+        "description": "Want your web site to display more quickly? This book presents 14 specific rules that will cut 25% to 50% off response time when users request a page.",
+        "pageCount": 170,
+        "imageLinks": {
+          "thumbnail": "https://books.google.com/books/content?id=N1GMAgAAQBAJ&printsec=frontcover&img=1&zoom=1"
+        },
+        "previewLink": "https://play.google.com/books/reader?id=N1GMAgAAQBAJ"
+      }
+    },
+    {
+      "id": "Vl_lBQAAQBAJ",
+      "volumeInfo": {
+        "title": "HTML5: Up and Running",
+        "subtitle": "Dive into the Future of Web Development",
+        "authors": ["Mark Pilgrim"],
+        "publisher": "O'Reilly Media",
+        "publishedDate": "2010-08-06",
+        "description": "If you do not know about the new features available in HTML5, now is the time to find out. This book provides practical information about how and why the latest version of this markup language is significantly changing the way you develop for the Web.",
+        "pageCount": 224,
+        "imageLinks": {
+          "thumbnail": "https://books.google.com/books/content?id=Vl_lBQAAQBAJ&printsec=frontcover&img=1&zoom=1"
+        },
+        "previewLink": "https://play.google.com/books/reader?id=Vl_lBQAAQBAJ"
+      }
+    }
+  ]
+}

@@ -13,7 +13,7 @@
         }
         .animate-pulse-slow { animation: pulse-slow 8s infinite; }
         
-        /* Custom styling for the data table look */
+        
         .data-row { display: flex; padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
         .data-label { width: 140px; font-weight: bold; color: #cbd5e1; }
         .data-value { flex: 1; color: #94a3b8; }
@@ -85,13 +85,13 @@
 
     <script>
         $(document).ready(function() {
-            // Reverting back to local JSON to avoid API errors
+           
             $.getJSON("Books.json", function(data) {
                 const info = data.volumeInfo;
                 const sale = data.saleInfo;
                 const access = data.accessInfo;
 
-                // Basic Info
+                
                 $("#title").text(info.title || "No Title");
                 $("#subtitle").text(info.subtitle || "");
                 $("#authors").text(info.authors ? info.authors.join(", ") : "N/A");
@@ -103,14 +103,14 @@
                 $("#maturity").text(info.maturityRating || "N/A");
                 $("#description").html(info.description || "No description provided.");
                 
-                // Ratings
+            
                 if (info.averageRating) {
                     $("#rating").text(`${info.averageRating} (${info.ratingsCount} ratings)`);
                 } else {
                     $("#rating").text("No ratings");
                 }
 
-                // Identifiers Mapping (ISBNs)
+                
                 if (info.industryIdentifiers) {
                     let idString = info.industryIdentifiers.map(id => `${id.type}: ${id.identifier}`).join(" | ");
                     $("#identifiers").text(idString);
@@ -118,21 +118,21 @@
                     $("#identifiers").text("N/A");
                 }
 
-                // Sales & Formats
+               
                 $("#sales").text(`Saleability: ${sale.saleability} | eBook: ${sale.isEbook ? 'Yes' : 'No'}`);
                 $("#formats").text(`EPUB: ${access.epub.isAvailable ? 'Yes' : 'No'} | PDF: ${access.pdf.isAvailable ? 'Yes' : 'No'}`);
                 
-                // Access Details
+                
                 $("#access").text(`Country: ${access.country} | Viewability: ${access.viewability} | Text-to-Speech: ${access.textToSpeechPermission} | Embeddable: ${access.embeddable ? 'Yes' : 'No'} | Public Domain: ${access.publicDomain ? 'Yes' : 'No'}`);
 
-                // Links & Buttons
+                
                 $("#apiLink").attr("href", data.selfLink).text(data.selfLink);
                 $("#btn-preview").attr("href", access.webReaderLink);
                 $("#btn-info").attr("href", info.infoLink);
                 $("#btn-google").attr("href", info.canonicalVolumeLink);
                 $("#btn-reader").attr("href", access.webReaderLink);
 
-                // Categories (Loop to create tags)
+               
                 if (info.categories) {
                     $.each(info.categories, function(index, category) {
                         $("#categories").append(`<span class="px-4 py-1.5 rounded-full border border-gray-600 text-xs text-gray-300 bg-gray-800/50">${category}</span>`);
@@ -141,7 +141,7 @@
                     $("#categories").text("No categories listed.");
                 }
 
-                // Cover Image
+               
                 let imgUrl = info.imageLinks ? info.imageLinks.thumbnail : "https://via.placeholder.com/250x350?text=No+Cover";
                 imgUrl = imgUrl.replace("http:", "https:"); 
                 

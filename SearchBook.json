@@ -26,13 +26,85 @@
         "authors": ["Michal Zalewski"],
         "publisher": "No Starch Press",
         "publishedDate": "2012",
-        "description": "Modern web applications are built on a tangle of technologies that have been developed over time and then haphazardly pieced together. Every piece of the web application stack, from HTTP requests to b...",
+        "description": "Modern web applications are built on a tangle of technologies that have been developed over time and then haphazardly pieced together. Every piece of the web application stack, from HTTP requests to browsers, has security flaws.",
         "pageCount": 320,
         "imageLinks": {
           "thumbnail": "https://books.google.com/books/content?id=7vW9s-w0lT8C&printsec=frontcover&img=1&zoom=1"
         },
         "previewLink": "https://play.google.com/books/reader?id=7vW9s-w0lT8C"
       }
-    }
-  ]
-}
+    },
+    {
+      "id": "OP1sDwAAQBAJ",
+      "volumeInfo": {
+        "title": "Learning Web Design",
+        "subtitle": "A Beginner's Guide to HTML, CSS, JavaScript, and Web Graphics",
+        "authors": ["Jennifer Robbins"],
+        "publisher": "O'Reilly Media",
+        "publishedDate": "2018-05-11",
+        "description": "Do you want to build web pages but have no prior experience? This friendly guide is the perfect place to start. You’ll begin at square one, learning how the web and web pages work, and then steadily build from there.",
+        "pageCount": 808,
+        "imageLinks": {
+          "thumbnail": "https://books.google.com/books/content?id=OP1sDwAAQBAJ&printsec=frontcover&img=1&zoom=1"
+        },
+        "previewLink": "https://play.google.com/books/reader?id=OP1sDwAAQBAJ"
+      }
+    },
+    {
+      "id": "yN_cCwAAQBAJ",
+      "volumeInfo": {
+        "title": "Modern Web Development",
+        "subtitle": "Understanding domains, technologies, and user experience",
+        "authors": ["Dino Esposito"],
+        "publisher": "Microsoft Press",
+        "publishedDate": "2016-02-15",
+        "description": "Master powerful new approaches to web architecture, design, and user experience. This book presents a pragmatic, up-to-date view of web development challenges and solutions.",
+        "pageCount": 400,
+        "imageLinks": {
+          "thumbnail": "https://books.google.com/books/content?id=yN_cCwAAQBAJ&printsec=frontcover&img=1&zoom=1"
+        },
+        "previewLink": "https://play.google.com/books/reader?id=yN_cCwAAQBAJ"
+      }
+    },
+    {
+      "id": "p1v6DwAAQBAJ",
+      "volumeInfo": {
+        "title": "Eloquent JavaScript, 3rd Edition",
+        "subtitle": "A Modern Introduction to Programming",
+        "authors": ["Marijn Haverbeke"],
+        "publisher": "No Starch Press",
+        "publishedDate": "2018-12-04",
+        "description": "Completely revised and updated, this best-selling introduction to programming in JavaScript focuses on writing real applications. JavaScript lies at the heart of almost every modern web application.",
+        "pageCount": 472,
+        "imageLinks": {
+          "thumbnail": "https://books.google.com/books/content?id=p1v6DwAAQBAJ&printsec=frontcover&img=1&zoom=1"
+        },
+        "previewLink": "https://play.google.com/books/reader?id=p1v6DwAAQBAJ"
+      }
+    },
+    {
+      "id": "PT1wDwAAQBAJ",
+      "volumeInfo": {
+        "title": "Responsive Web Design with HTML5 and CSS",
+        "subtitle": "Develop future-proof responsive websites using the latest HTML5 and CSS techniques",
+        "authors": ["Ben Frain"],
+        "publisher": "Packt Publishing Ltd",
+        "publishedDate": "2020-04-30",
+        "description": "Publisher's note: To make use of the most recent CSS and HTML features, a new, fully revised fourth edition of this book is now available, updated for 2022.",
+        "pageCount": 434,
+        "imageLinks": {
+          "thumbnail": "https://books.google.com/books/content?id=PT1wDwAAQBAJ&printsec=frontcover&img=1&zoom=1"
+        },
+        "previewLink": "https://play.google.com/books/reader?id=PT1wDwAAQBAJ"
+      }
+    },
+    {
+      "id": "8Gz4AgAAQBAJ",
+      "volumeInfo": {
+        "title": "Smashing Node.js",
+        "subtitle": "JavaScript Everywhere",
+        "authors": ["Guillermo Rauch"],
+        "publisher": "John Wiley & Sons",
+        "publishedDate": "2012-08-14",
+        "description": "Learn to make more efficient apps, with just one language! Smashing Node.js: JavaScript Everywhere equips you with the necessary tools to understand Node.js and its uses in developing efficient, scalable web applications.",
+        "pageCount": 3

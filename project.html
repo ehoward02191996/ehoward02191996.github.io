@@ -2,30 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Individual Project Milestones</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects - Eric Howard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: sans-serif; background: #0b0e14; color: white; padding: 40px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .milestone-section { border: 1px solid #2d333b; border-radius: 8px; padding: 20px; background: #161b22; }
-        h1 { border-left: 4px solid #58a6ff; padding-left: 15px; }
-        ul { list-style: none; padding: 0; }
-        li { margin: 15px 0; padding: 10px; border-bottom: 1px solid #30363d; }
-        a { color: #58a6ff; text-decoration: none; font-weight: bold; }
-        a:hover { text-decoration: underline; }
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.1); }
+        }
+        .animate-pulse-slow { animation: pulse-slow 8s infinite; }
     </style>
 </head>
-<body>
-    <div class="container">
-        <p><a href="index.html">← Back to Home</a></p>
-        <h1>Individual Project</h1>
-        
-        <div class="milestone-section">
-            <h2>Milestone 1: JSON Data Display</h2>
-            <p>This milestone focuses on fetching and displaying book metadata using JavaScript, jQuery, and JSON.</p>
-            <ul>
-                <li>📖 <a href="SingleBook.html">Single Book Detail View</a> - Pulls from <em>Books.json</em></li>
-                <li>🔍 <a href="BookSearch.html">Book Search Results View</a> - Pulls from <em>SearchBook.json</em></li>
-            </ul>
-        </div>
+<body class="bg-black text-white min-h-screen font-sans">
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[120px] animate-pulse-slow"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[120px] animate-pulse-slow"></div>
     </div>
-</body>
+
+    <div class="relative z-10 p-10 max-w-4xl mx-auto">
+        <a href="index.html" class="text-purple-400 hover:text-purple-300 transition-colors">← Back to Home</a>
+        
+        <h1 class="text-5xl font-bold mt-6 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+            Individual Project
+        </h1>
+
+        <p class="mt-4 text-gray-400 max-w-2xl">
+            This project focuses on building a single-page application that processes JSON data and displays it using JavaScript and jQuery.
+        </p>
+
+        <div class="mt-10 p-8 border border-white/10 rounded-3xl bg-gray-900/60 backdrop-blur-xl">
+            <h2 class="text-2xl font-semibold mb-6 text-white flex items-center">
+                <span class="mr-3 p-2 bg-purple-500/20 rounded-lg text-purple-400 text-sm">M1</span>
+                Milestone 1: JSON Data Integration
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <a href="SingleBook.html" class="group block p-6 border border-white/5 rounded-2xl bg-white/5 hover:bg-white/10 transition-all">
+                    <h3 class="text-xl font-bold text-purple-400 group-hover:text-purple-300">Single Book View</h3>
+                    <p

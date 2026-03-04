@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Search List - Eric Howard</title>
+    <title>Milestone 1: Book List Data - Eric Howard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
@@ -23,21 +23,30 @@
     <div class="relative z-10 p-6 md:p-10 max-w-4xl mx-auto flex flex-col min-h-screen">
         <a href="Project.html" class="text-pink-400 hover:text-pink-300 transition-colors mb-6 inline-block font-medium">← Back to Projects</a>
         
-        <header class="mb-8 border-b border-white/10 pb-6">
-            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-400 to-blue-600 bg-clip-text text-transparent mb-3">
-                Book Search List
+        <header class="mb-8 border-b border-white/10 pb-8">
+            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-400 to-blue-600 bg-clip-text text-transparent mb-4">
+                Milestone 1: Book List Data
             </h1>
-            <p class="text-gray-400 italic">
-                Source: SearchBook.json
+            
+            <p class="text-gray-300 text-lg leading-relaxed mb-6">
+                This page reads <strong>SearchBook.json</strong> with JavaScript and jQuery, then displays each book from the <strong>items</strong> list.
             </p>
+
+            <div class="bg-white/5 border border-white/10 rounded-xl p-4 inline-flex flex-wrap gap-6 text-sm md:text-base">
+                <div><strong class="text-pink-400">kind:</strong> <span id="root-kind" class="text-gray-300">Loading...</span></div>
+                <div><strong class="text-blue-400">totalItems:</strong> <span id="root-total" class="text-gray-300">Loading...</span></div>
+                <div><strong class="text-purple-400">items shown:</strong> <span id="root-shown" class="text-gray-300">Loading...</span></div>
+            </div>
         </header>
 
         <main id="results-list" class="flex flex-col gap-6 flex-grow">
-            <div id="loading-msg" class="text-pink-400 italic animate-pulse">Fetching search results...</div>
+            <div id="loading-msg" class="text-pink-400 italic animate-pulse">Loading book results...</div>
         </main>
 
-        <footer class="py-10 text-center text-gray-500 mt-10">
-            <p>© 2026 IT 4403 Course Project</p>
+        <footer class="py-10 text-center text-gray-500 mt-10 border-t border-white/10 text-sm">
+            <p class="mb-2"><strong class="text-gray-400">Disclaimer:</strong> This website is a student project created for coursework in IT 4403 – Advanced Web and Mobile Applications. All content is for educational purposes only.</p>
+            <p class="mb-6">For more information, visit the <a href="https://www.kennesaw.edu/ccse/academics/information-technology/" target="_blank" class="text-blue-400 hover:underline">CCSE Department of Information Technology</a>.</p>
+            <p>© 2026 Eric Howard</p>
         </footer>
     </div>
 
@@ -47,6 +56,11 @@
             const jsonUrl = "SearchBook.json?nocache=" + new Date().getTime();
 
             $.getJSON(jsonUrl, function(data) {
+                
+                $("#root-kind").text(data.kind || "N/A");
+                $("#root-total").text(data.totalItems || "0");
+                $("#root-shown").text(data.items ? data.items.length : "0");
+
                 $("#results-list").empty();
 
                 if (!data.items) {
@@ -68,7 +82,6 @@
                     const language = info.language || "N/A";
                     const printType = info.printType || "N/A";
                     const desc = info.description || "No description available.";
-                    
                     
                     const previewLink = info.previewLink || "#";
                     const webReaderLink = access.webReaderLink || "#";
@@ -97,7 +110,6 @@
                                     <a href="${apiLink}" target="_blank" class="px-4 py-2 border border-purple-600/50 bg-purple-600/10 rounded-lg hover:bg-purple-600/30 hover:border-purple-400 transition-colors text-sm font-medium text-purple-300">API</a>
                                 </div>
                             </div>
-
                         </div>
                     `;
                     $("#results-list").append(cardHtml);

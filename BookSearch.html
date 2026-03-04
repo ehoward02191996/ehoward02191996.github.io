@@ -43,7 +43,7 @@
 
     <script>
         $(document).ready(function() {
-            // Keeping the cache-buster to ensure we get the fresh JSON file
+            
             const jsonUrl = "SearchBook.json?nocache=" + new Date().getTime();
 
             $.getJSON(jsonUrl, function(data) {
@@ -69,14 +69,12 @@
                     const printType = info.printType || "N/A";
                     const desc = info.description || "No description available.";
                     
-                    // The 5 Button Links
+                  
                     const previewLink = info.previewLink || "#";
-                    const infoLink = info.infoLink || "#";
-                    const canonicalLink = info.canonicalVolumeLink || "#";
                     const webReaderLink = access.webReaderLink || "#";
                     const apiLink = item.selfLink || "#";
                     
-                    // Card Template matching the screenshot layout
+                   
                     const cardHtml = `
                         <div class="bg-gray-900/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-xl hover:border-pink-500/30 transition-all flex flex-col sm:flex-row gap-6">
                             
@@ -96,8 +94,6 @@
                                 
                                 <div class="flex flex-wrap gap-2 mt-auto">
                                     <a href="${previewLink}" target="_blank" class="px-4 py-2 border border-gray-600 rounded-lg hover:bg-white/10 hover:border-pink-500 transition-colors text-sm font-medium">Preview</a>
-                                    <a href="${infoLink}" target="_blank" class="px-4 py-2 border border-gray-600 rounded-lg hover:bg-white/10 hover:border-pink-500 transition-colors text-sm font-medium">Info</a>
-                                    <a href="${canonicalLink}" target="_blank" class="px-4 py-2 border border-gray-600 rounded-lg hover:bg-white/10 hover:border-pink-500 transition-colors text-sm font-medium">Canonical</a>
                                     <a href="${webReaderLink}" target="_blank" class="px-4 py-2 border border-gray-600 rounded-lg hover:bg-white/10 hover:border-pink-500 transition-colors text-sm font-medium">Web Reader</a>
                                     <a href="${apiLink}" target="_blank" class="px-4 py-2 border border-gray-600 rounded-lg hover:bg-white/10 hover:border-pink-500 transition-colors text-sm font-medium">API</a>
                                 </div>

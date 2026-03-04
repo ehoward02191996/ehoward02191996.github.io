@@ -20,22 +20,20 @@
         <div class="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[120px] animate-pulse-slow" style="animation-delay: 2s;"></div>
     </div>
 
-    <div class="relative z-10 p-6 md:p-10 max-w-5xl mx-auto flex flex-col min-h-screen">
+    <div class="relative z-10 p-6 md:p-10 max-w-4xl mx-auto flex flex-col min-h-screen">
         <a href="Project.html" class="text-pink-400 hover:text-pink-300 transition-colors mb-6 inline-block font-medium">← Back to Projects</a>
         
-        <header class="mb-10 text-center md:text-left border-b border-white/10 pb-6">
+        <header class="mb-8 border-b border-white/10 pb-6">
             <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-400 to-blue-600 bg-clip-text text-transparent mb-3">
                 Book Search List
             </h1>
             <p class="text-gray-400 italic">
-                Search query: "Modern Web" — Source: SearchBook.json
+                Source: SearchBook.json
             </p>
         </header>
 
-        <p id="results-count" class="text-gray-300 mb-6 font-medium">Loading results...</p>
-
-        <main id="results-list" class="flex flex-col gap-8 flex-grow">
-            <div id="loading-msg" class="text-center text-pink-400 italic animate-pulse">Fetching search results...</div>
+        <main id="results-list" class="flex flex-col gap-6 flex-grow">
+            <div id="loading-msg" class="text-pink-400 italic animate-pulse">Fetching search results...</div>
         </main>
 
         <footer class="py-10 text-center text-gray-500 mt-10">
@@ -45,71 +43,75 @@
 
     <script>
         $(document).ready(function() {
-            // CACHE BUSTER: Appends a unique timestamp so the browser NEVER uses the old saved file
+            // Keeping the cache-buster to ensure we get the fresh JSON file
             const jsonUrl = "SearchBook.json?nocache=" + new Date().getTime();
 
             $.getJSON(jsonUrl, function(data) {
                 $("#results-list").empty();
 
-                if (data.items) {
-                    $("#results-count").text(`Showing ${data.items.length} of ${data.totalItems || data.items.length} total results.`);
-                } else {
-                    $("#results-count").text("No results found.");
+                if (!data.items) {
+                    $("#results-list").html("<p class='text-red-400'>No results found.</p>");
                     return;
                 }
 
                 $.each(data.items, function(i, item) {
                     const info = item.volumeInfo;
+                    const access = item.accessInfo || {};
                     
                     let thumb = info.imageLinks ? info.imageLinks.thumbnail : "https://via.placeholder.com/150x200?text=No+Cover";
                     thumb = thumb.replace("http:", "https:"); 
                     
                     const title = info.title || "No Title";
-                    const subtitle = info.subtitle ? `<p class="text-lg text-gray-400 italic mb-3">${info.subtitle}</p>` : "";
                     const authors = info.authors ? info.authors.join(", ") : "N/A";
                     const publisher = info.publisher || "N/A";
                     const publishedDate = info.publishedDate || "N/A";
-                    const pages = info.pageCount || "N/A";
+                    const language = info.language || "N/A";
+                    const printType = info.printType || "N/A";
                     const desc = info.description || "No description available.";
-                    const preview = info.previewLink || "#";
                     
+                    // The 5 Button Links
+                    const previewLink = info.previewLink || "#";
+                    const infoLink = info.infoLink || "#";
+                    const canonicalLink = info.canonicalVolumeLink || "#";
+                    const webReaderLink = access.webReaderLink || "#";
+                    const apiLink = item.selfLink || "#";
+                    
+                    // Card Template matching the screenshot layout
                     const cardHtml = `
-                        <div class="bg-gray-900/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 md:p-8 shadow-xl hover:border-pink-500/30 transition-all flex flex-col md:flex-row gap-8">
-                            <div class="flex-shrink-0 mx-auto md:mx-0">
-                                <img src="${thumb}" alt="Book Cover" class="w-32 md:w-40 object-cover rounded-lg shadow-lg shadow-black/50 border border-white/10">
+                        <div class="bg-gray-900/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-xl hover:border-pink-500/30 transition-all flex flex-col sm:flex-row gap-6">
+                            
+                            <div class="flex-shrink-0 mx-auto sm:mx-0">
+                                <img src="${thumb}" alt="Book Cover" class="w-32 sm:w-40 object-cover rounded shadow-lg shadow-black/50 border border-white/10">
                             </div>
-                            <div class="flex-grow flex flex-col justify-start">
-                                <h2 class="text-2xl font-bold text-white mb-1">${title}</h2>
-                                ${subtitle}
-                                <div class="space-y-1 text-sm text-gray-300 mb-4">
-                                    <p><strong class="text-gray-100 font-semibold w-20 inline-block">Author(s):</strong> ${authors}</p>
-                                    <p><strong class="text-gray-100 font-semibold w-20 inline-block">Publisher:</strong> ${publisher}</p>
-                                    <p><strong class="text-gray-100 font-semibold w-20 inline-block">Published:</strong> ${publishedDate}</p>
-                                    <p><strong class="text-gray-100 font-semibold w-20 inline-block">Pages:</strong> ${pages}</p>
-                                </div>
-                                <div class="border-l-4 border-pink-500/70 pl-4 py-1 mb-6">
-                                    <p class="text-gray-400 text-sm leading-relaxed">${desc}</p>
-                                </div>
-                                <div class="mt-auto pt-2">
-                                    <a href="${preview}" target="_blank" class="inline-block px-6 py-2 bg-pink-600/20 hover:bg-pink-600/40 border border-pink-500/50 text-pink-300 rounded text-sm font-semibold transition-colors">
-                                        Preview on Google Books
-                                    </a>
+
+                            <div class="flex-grow text-gray-300">
+                                <h2 class="text-2xl font-bold text-white mb-3">${title}</h2>
+                                
+                                <p class="mb-1"><strong class="text-gray-100">Authors:</strong> ${authors}</p>
+                                <p class="mb-1"><strong class="text-gray-100">Publisher:</strong> ${publisher}</p>
+                                <p class="mb-1"><strong class="text-gray-100">Published:</strong> ${publishedDate}</p>
+                                <p class="mb-4"><strong class="text-gray-100">Language:</strong> ${language} &bull; <strong class="text-gray-100">Print:</strong> ${printType}</p>
+                                
+                                <p class="text-sm leading-relaxed text-gray-400 mb-6">${desc}</p>
+                                
+                                <div class="flex flex-wrap gap-2 mt-auto">
+                                    <a href="${previewLink}" target="_blank" class="px-4 py-2 border border-gray-600 rounded-lg hover:bg-white/10 hover:border-pink-500 transition-colors text-sm font-medium">Preview</a>
+                                    <a href="${infoLink}" target="_blank" class="px-4 py-2 border border-gray-600 rounded-lg hover:bg-white/10 hover:border-pink-500 transition-colors text-sm font-medium">Info</a>
+                                    <a href="${canonicalLink}" target="_blank" class="px-4 py-2 border border-gray-600 rounded-lg hover:bg-white/10 hover:border-pink-500 transition-colors text-sm font-medium">Canonical</a>
+                                    <a href="${webReaderLink}" target="_blank" class="px-4 py-2 border border-gray-600 rounded-lg hover:bg-white/10 hover:border-pink-500 transition-colors text-sm font-medium">Web Reader</a>
+                                    <a href="${apiLink}" target="_blank" class="px-4 py-2 border border-gray-600 rounded-lg hover:bg-white/10 hover:border-pink-500 transition-colors text-sm font-medium">API</a>
                                 </div>
                             </div>
+
                         </div>
                     `;
                     $("#results-list").append(cardHtml);
                 });
             }).fail(function(jqXHR, textStatus, errorThrown) {
-                // EXTREME ERROR LOGGING
                 $("#results-list").html(`
-                    <div class="bg-red-900/30 border-l-4 border-red-500 p-6 rounded-lg text-left max-w-2xl mx-auto w-full">
-                        <h3 class="text-red-400 font-bold text-xl mb-2">Detailed Error Report:</h3>
-                        <p class="text-gray-300"><strong>Status:</strong> ${textStatus}</p>
-                        <p class="text-gray-300"><strong>Error Thrown:</strong> ${errorThrown}</p>
-                        <p class="text-gray-300"><strong>HTTP Code:</strong> ${jqXHR.status}</p>
-                        <hr class="border-red-500/30 my-4">
-                        <p class="text-sm text-gray-400">If Status is "parsererror", you missed a comma or bracket in your JSON file. If HTTP Code is "404", the file is missing from GitHub.</p>
+                    <div class="bg-red-900/30 border-l-4 border-red-500 p-6 rounded-lg">
+                        <h3 class="text-red-400 font-bold mb-2">Error:</h3>
+                        <p class="text-gray-300">Status: ${textStatus} (If parsererror, check JSON syntax)</p>
                     </div>
                 `);
             });

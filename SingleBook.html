@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Book Details - Eric Howard</title>
+    <title>Detailed Book View - Eric Howard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
@@ -12,6 +12,11 @@
             50% { opacity: 0.5; transform: scale(1.1); }
         }
         .animate-pulse-slow { animation: pulse-slow 8s infinite; }
+        
+        /* Custom styling for the data table look */
+        .data-row { display: flex; padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .data-label { width: 140px; font-weight: bold; color: #cbd5e1; }
+        .data-value { flex: 1; color: #94a3b8; }
     </style>
 </head>
 <body class="bg-black text-white min-h-screen font-sans">
@@ -21,45 +26,58 @@
     </div>
 
     <div class="relative z-10 p-6 md:p-10 max-w-5xl mx-auto flex flex-col min-h-screen">
-        <a href="BookSearch.html" class="text-purple-400 hover:text-purple-300 transition-colors mb-6 inline-block font-medium">← Back to Search</a>
+        <a href="Project.html" class="text-purple-400 hover:text-purple-300 transition-colors mb-6 inline-block font-medium">← Back to Projects</a>
         
-        <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 to-cyan-600 bg-clip-text text-transparent mb-10">
-            Live Book Details
-        </h1>
-
-        <main class="bg-gray-900/60 backdrop-blur-xl border border-purple-500/30 rounded-3xl p-8 md:p-12 shadow-2xl shadow-purple-500/5 flex-grow">
-            <div id="book-content" class="flex flex-col md:flex-row gap-10">
-                
-                <div class="w-full md:w-1/3 flex justify-center items-start">
-                    <img id="cover" src="" alt="Book Cover" class="rounded-xl shadow-lg shadow-black/50 border border-white/10 object-cover w-48 md:w-full max-w-[250px] hidden">
-                    <div id="loading-spinner" class="animate-pulse w-48 h-72 bg-white/5 rounded-xl border border-white/10 flex items-center justify-center">
-                        <span class="text-gray-500">Querying Google API...</span>
-                    </div>
+        <main class="bg-gray-900/60 backdrop-blur-xl border border-purple-500/30 rounded-3xl p-8 md:p-10 shadow-2xl shadow-purple-500/5">
+            
+            <div class="flex flex-col md:flex-row gap-10 mb-8">
+                <div class="w-full md:w-1/4 flex-shrink-0">
+                    <img id="cover" src="" alt="Cover" class="w-full rounded-lg shadow-xl shadow-black border border-white/20 hidden">
+                    <div id="loading-spinner" class="animate-pulse w-full h-64 bg-white/5 rounded-lg border border-white/10 flex items-center justify-center text-gray-500">Loading...</div>
                 </div>
 
-                <div class="w-full md:w-2/3 space-y-4">
-                    <h2 id="title" class="text-3xl md:text-4xl font-bold text-white">Loading Title...</h2>
-                    <p class="text-xl text-purple-300 font-medium italic">By <span id="author"></span></p>
-                    
-                    <div class="flex flex-wrap gap-4 text-sm text-gray-400 border-y border-white/10 py-4 my-6">
-                        <p class="bg-black/30 px-3 py-1 rounded"><strong class="text-gray-300">Publisher:</strong> <span id="publisher"></span></p>
-                        <p class="bg-black/30 px-3 py-1 rounded"><strong class="text-gray-300">Pages:</strong> <span id="pages"></span></p>
-                        <p class="bg-black/30 px-3 py-1 rounded"><strong class="text-gray-300">Published:</strong> <span id="date"></span></p>
+                <div class="w-full md:w-3/4">
+                    <h1 id="title" class="text-3xl md:text-4xl font-bold text-white mb-2">Loading...</h1>
+                    <h2 id="subtitle" class="text-xl text-gray-400 mb-6"></h2>
+
+                    <div class="text-sm">
+                        <div class="data-row"><div class="data-label">Authors</div><div class="data-value" id="authors"></div></div>
+                        <div class="data-row"><div class="data-label">Publisher</div><div class="data-value" id="publisher"></div></div>
+                        <div class="data-row"><div class="data-label">Published</div><div class="data-value" id="date"></div></div>
+                        <div class="data-row"><div class="data-label">Pages</div><div class="data-value" id="pages"></div></div>
+                        <div class="data-row"><div class="data-label">Print Type</div><div class="data-value" id="printType"></div></div>
+                        <div class="data-row"><div class="data-label">Language</div><div class="data-value" id="language"></div></div>
+                        <div class="data-row"><div class="data-label">Maturity</div><div class="data-value" id="maturity"></div></div>
+                        <div class="data-row"><div class="data-label">Identifiers</div><div class="data-value" id="identifiers"></div></div>
+                        <div class="data-row"><div class="data-label">Rating</div><div class="data-value" id="rating"></div></div>
+                        <div class="data-row"><div class="data-label">Sales</div><div class="data-value" id="sales"></div></div>
+                        <div class="data-row"><div class="data-label">Formats</div><div class="data-value" id="formats"></div></div>
+                        <div class="data-row"><div class="data-label">Access</div><div class="data-value" id="access"></div></div>
+                        <div class="data-row border-b-0"><div class="data-label text-blue-400">API Link</div><div class="data-value"><a id="apiLink" href="#" target="_blank" class="text-blue-400 hover:underline break-all"></a></div></div>
                     </div>
 
-                    <div id="description" class="text-gray-300 leading-relaxed text-lg">
-                        Fetching live description from Google Books...
-                    </div>
-                    
-                    <div class="mt-8 pt-6">
-                        <a id="google-link" href="#" target="_blank" class="inline-block px-6 py-3 bg-purple-600/20 border border-purple-500/50 hover:bg-purple-600/40 text-purple-300 rounded-lg font-semibold transition-colors">
-                            View on Google Books ↗
-                        </a>
+                    <div class="flex flex-wrap gap-3 mt-6">
+                        <a href="#" id="btn-preview" target="_blank" class="px-5 py-2 rounded border border-gray-500 hover:bg-white/10 transition-colors text-sm font-semibold">Preview</a>
+                        <a href="#" id="btn-info" target="_blank" class="px-5 py-2 rounded border border-gray-500 hover:bg-white/10 transition-colors text-sm font-semibold">Info</a>
+                        <a href="#" id="btn-google" target="_blank" class="px-5 py-2 rounded bg-white text-black hover:bg-gray-200 transition-colors text-sm font-bold">Google Books</a>
+                        <a href="#" id="btn-reader" target="_blank" class="px-5 py-2 rounded border border-gray-500 hover:bg-white/10 transition-colors text-sm font-semibold">Web Reader</a>
                     </div>
                 </div>
             </div>
-        </main>
 
+            <div class="mt-10">
+                <h3 class="text-xl font-bold text-white mb-4 border-b border-white/10 pb-2">Description</h3>
+                <div id="description" class="text-gray-300 text-sm leading-relaxed whitespace-pre-line"></div>
+            </div>
+
+            <div class="mt-10">
+                <h3 class="text-xl font-bold text-white mb-4 border-b border-white/10 pb-2">Categories</h3>
+                <div id="categories" class="flex flex-wrap gap-2 mt-4">
+                    </div>
+            </div>
+
+        </main>
+        
         <footer class="py-10 text-center text-gray-500 mt-auto">
             <p>© 2026 IT 4403 Course Project</p>
         </footer>
@@ -67,43 +85,72 @@
 
     <script>
         $(document).ready(function() {
-            // 1. Check if the URL has an ID passed to it from the Search Page
-            const urlParams = new URLSearchParams(window.location.search);
-            let bookId = urlParams.get('id');
-            
-            // 2. If no ID is in the URL, default to "Lead Like a Marine"
-            if (!bookId) {
-                bookId = "1mIDEAAAQBAJ"; 
-            }
-
-            // 3. Query the live API for this exact book
-            const apiUrl = "https://www.googleapis.com/books/v1/volumes/" + bookId;
-
-            $.getJSON(apiUrl, function(data) {
+            // Reverting back to local JSON to avoid API errors
+            $.getJSON("Books.json", function(data) {
                 const info = data.volumeInfo;
-                
-                // Populate text fields
-                $("#title").text(info.title || "No Title Available");
-                $("#author").text(info.authors ? info.authors.join(", ") : "Unknown Author");
-                $("#publisher").text(info.publisher || "Unknown");
-                $("#pages").text(info.pageCount || "N/A");
+                const sale = data.saleInfo;
+                const access = data.accessInfo;
+
+                // Basic Info
+                $("#title").text(info.title || "No Title");
+                $("#subtitle").text(info.subtitle || "");
+                $("#authors").text(info.authors ? info.authors.join(", ") : "N/A");
+                $("#publisher").text(info.publisher || "N/A");
                 $("#date").text(info.publishedDate || "N/A");
-                $("#description").html(info.description || "No detailed description available for this book.");
+                $("#pages").text(info.pageCount || "N/A");
+                $("#printType").text(info.printType || "N/A");
+                $("#language").text(info.language || "N/A");
+                $("#maturity").text(info.maturityRating || "N/A");
+                $("#description").html(info.description || "No description provided.");
                 
-                // Link to actual Google Books page
-                $("#google-link").attr("href", info.infoLink);
+                // Ratings
+                if (info.averageRating) {
+                    $("#rating").text(`${info.averageRating} (${info.ratingsCount} ratings)`);
+                } else {
+                    $("#rating").text("No ratings");
+                }
+
+                // Identifiers Mapping (ISBNs)
+                if (info.industryIdentifiers) {
+                    let idString = info.industryIdentifiers.map(id => `${id.type}: ${id.identifier}`).join(" | ");
+                    $("#identifiers").text(idString);
+                } else {
+                    $("#identifiers").text("N/A");
+                }
+
+                // Sales & Formats
+                $("#sales").text(`Saleability: ${sale.saleability} | eBook: ${sale.isEbook ? 'Yes' : 'No'}`);
+                $("#formats").text(`EPUB: ${access.epub.isAvailable ? 'Yes' : 'No'} | PDF: ${access.pdf.isAvailable ? 'Yes' : 'No'}`);
                 
-                // Handle high-res image if available, force HTTPS
-                let imgUrl = info.imageLinks ? (info.imageLinks.medium || info.imageLinks.thumbnail) : "https://via.placeholder.com/250x350?text=No+Cover";
-                imgUrl = imgUrl.replace("http:", "https:");
+                // Access Details
+                $("#access").text(`Country: ${access.country} | Viewability: ${access.viewability} | Text-to-Speech: ${access.textToSpeechPermission} | Embeddable: ${access.embeddable ? 'Yes' : 'No'} | Public Domain: ${access.publicDomain ? 'Yes' : 'No'}`);
+
+                // Links & Buttons
+                $("#apiLink").attr("href", data.selfLink).text(data.selfLink);
+                $("#btn-preview").attr("href", access.webReaderLink);
+                $("#btn-info").attr("href", info.infoLink);
+                $("#btn-google").attr("href", info.canonicalVolumeLink);
+                $("#btn-reader").attr("href", access.webReaderLink);
+
+                // Categories (Loop to create tags)
+                if (info.categories) {
+                    $.each(info.categories, function(index, category) {
+                        $("#categories").append(`<span class="px-4 py-1.5 rounded-full border border-gray-600 text-xs text-gray-300 bg-gray-800/50">${category}</span>`);
+                    });
+                } else {
+                    $("#categories").text("No categories listed.");
+                }
+
+                // Cover Image
+                let imgUrl = info.imageLinks ? info.imageLinks.thumbnail : "https://via.placeholder.com/250x350?text=No+Cover";
+                imgUrl = imgUrl.replace("http:", "https:"); 
                 
                 $("#loading-spinner").hide();
                 $("#cover").attr("src", imgUrl).removeClass("hidden");
                 
             }).fail(function() {
-                $("#title").text("API Connection Error");
-                $("#description").text("Could not fetch live data from Google Books API.");
-                $("#loading-spinner").hide();
+                $("#title").text("Error");
+                $("#subtitle").text("Could not load Books.json. Please ensure it is saved correctly in GitHub.");
             });
         });
     </script>

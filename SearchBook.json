@@ -1,37 +1,37 @@
 {
   "kind": "books#volumes",
+  "totalItems": 2341,
   "items": [
     {
+      "id": "Wfan6L9RGgYC",
       "volumeInfo": {
-        "title": "Modern Web Development",
-        "authors": ["Dino Esposito"],
-        "publishedDate": "2016",
-        "description": "A comprehensive guide to building modern web applications using the latest frameworks and practices.",
+        "title": "The Modern Web",
+        "subtitle": "Multi-device Web Development with HTML5, CSS3, and JavaScript",
+        "authors": ["Peter Gasston"],
+        "publisher": "No Starch Press",
+        "publishedDate": "2013",
+        "description": "Provides information on Web development for multiple devices, covering such topics as structure and semantics, device APIs, multimedia, and Web apps.",
+        "pageCount": 264,
         "imageLinks": {
-          "thumbnail": "https://books.google.com/books/content?id=yN_cCwAAQBAJ&printsec=frontcover&img=1&zoom=1"
-        }
+          "thumbnail": "https://books.google.com/books/content?id=Wfan6L9RGgYC&printsec=frontcover&img=1&zoom=1"
+        },
+        "previewLink": "https://play.google.com/books/reader?id=Wfan6L9RGgYC"
       }
     },
     {
+      "id": "7vW9s-w0lT8C",
       "volumeInfo": {
-        "title": "Learning Web Design",
-        "authors": ["Jennifer Robbins"],
-        "publishedDate": "2018",
-        "description": "A beginner's guide to HTML, CSS, JavaScript, and web graphics.",
+        "title": "The Tangled Web",
+        "subtitle": "A Guide to Securing Modern Web Applications",
+        "authors": ["Michal Zalewski"],
+        "publisher": "No Starch Press",
+        "publishedDate": "2012",
+        "description": "Modern web applications are built on a tangle of technologies that have been developed over time and then haphazardly pieced together. Every piece of the web application stack, from HTTP requests to b...",
+        "pageCount": 320,
         "imageLinks": {
-          "thumbnail": "https://books.google.com/books/content?id=OP1sDwAAQBAJ&printsec=frontcover&img=1&zoom=1"
-        }
-      }
-    },
-    {
-      "volumeInfo": {
-        "title": "JavaScript: The Definitive Guide",
-        "authors": ["David Flanagan"],
-        "publishedDate": "2020",
-        "description": "The essential reference for modern JavaScript programming.",
-        "imageLinks": {
-          "thumbnail": "https://books.google.com/books/content?id=NPbkDwAAQBAJ&printsec=frontcover&img=1&zoom=1"
-        }
+          "thumbnail": "https://books.google.com/books/content?id=7vW9s-w0lT8C&printsec=frontcover&img=1&zoom=1"
+        },
+        "previewLink": "https://play.google.com/books/reader?id=7vW9s-w0lT8C"
       }
     }
   ]

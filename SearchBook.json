@@ -1,165 +1,93 @@
 {
   "kind": "books#volumes",
-  "totalItems": 2341,
+  "totalItems": 4,
   "items": [
     {
       "id": "Wfan6L9RGgYC",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/Wfan6L9RGgYC",
       "volumeInfo": {
         "title": "The Modern Web",
-        "subtitle": "Multi-device Web Development with HTML5, CSS3, and JavaScript",
         "authors": ["Peter Gasston"],
         "publisher": "No Starch Press",
         "publishedDate": "2013",
-        "description": "Provides information on Web development for multiple devices, covering such topics as structure and semantics, device APIs, multimedia, and Web apps.",
-        "pageCount": 264,
+        "description": "Provides information on Web development for multiple devices, covering structure, semantics, and device APIs.",
+        "language": "en",
+        "printType": "BOOK",
         "imageLinks": {
           "thumbnail": "https://books.google.com/books/content?id=Wfan6L9RGgYC&printsec=frontcover&img=1&zoom=1"
         },
-        "previewLink": "https://play.google.com/books/reader?id=Wfan6L9RGgYC"
+        "previewLink": "https://play.google.com/books/reader?id=Wfan6L9RGgYC",
+        "infoLink": "https://play.google.com/store/books/details?id=Wfan6L9RGgYC",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=Wfan6L9RGgYC"
+      },
+      "accessInfo": {
+        "webReaderLink": "http://play.google.com/books/reader?id=Wfan6L9RGgYC"
       }
     },
     {
       "id": "7vW9s-w0lT8C",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/7vW9s-w0lT8C",
       "volumeInfo": {
         "title": "The Tangled Web",
-        "subtitle": "A Guide to Securing Modern Web Applications",
         "authors": ["Michal Zalewski"],
         "publisher": "No Starch Press",
         "publishedDate": "2012",
-        "description": "Modern web applications are built on a tangle of technologies that have been developed over time and then haphazardly pieced together. Every piece of the web application stack, from HTTP requests to browsers, has security flaws.",
-        "pageCount": 320,
+        "description": "Modern web applications are built on a tangle of technologies that have been developed over time and haphazardly pieced together. Every piece of the web application stack has security flaws.",
+        "language": "en",
+        "printType": "BOOK",
         "imageLinks": {
           "thumbnail": "https://books.google.com/books/content?id=7vW9s-w0lT8C&printsec=frontcover&img=1&zoom=1"
         },
-        "previewLink": "https://play.google.com/books/reader?id=7vW9s-w0lT8C"
+        "previewLink": "https://play.google.com/books/reader?id=7vW9s-w0lT8C",
+        "infoLink": "https://play.google.com/store/books/details?id=7vW9s-w0lT8C",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=7vW9s-w0lT8C"
+      },
+      "accessInfo": {
+        "webReaderLink": "http://play.google.com/books/reader?id=7vW9s-w0lT8C"
       }
     },
     {
       "id": "OP1sDwAAQBAJ",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/OP1sDwAAQBAJ",
       "volumeInfo": {
         "title": "Learning Web Design",
-        "subtitle": "A Beginner's Guide to HTML, CSS, JavaScript, and Web Graphics",
         "authors": ["Jennifer Robbins"],
         "publisher": "O'Reilly Media",
-        "publishedDate": "2018-05-11",
-        "description": "Do you want to build web pages but have no prior experience? This friendly guide is the perfect place to start. You will begin at square one, learning how the web and web pages work, and then steadily build from there.",
-        "pageCount": 808,
+        "publishedDate": "2018",
+        "description": "Do you want to build web pages but have no prior experience? This friendly guide is the perfect place to start. You will begin at square one, learning how the web and web pages work.",
+        "language": "en",
+        "printType": "BOOK",
         "imageLinks": {
           "thumbnail": "https://books.google.com/books/content?id=OP1sDwAAQBAJ&printsec=frontcover&img=1&zoom=1"
         },
-        "previewLink": "https://play.google.com/books/reader?id=OP1sDwAAQBAJ"
+        "previewLink": "https://play.google.com/books/reader?id=OP1sDwAAQBAJ",
+        "infoLink": "https://play.google.com/store/books/details?id=OP1sDwAAQBAJ",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=OP1sDwAAQBAJ"
+      },
+      "accessInfo": {
+        "webReaderLink": "http://play.google.com/books/reader?id=OP1sDwAAQBAJ"
       }
     },
     {
       "id": "yN_cCwAAQBAJ",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/yN_cCwAAQBAJ",
       "volumeInfo": {
-        "title": "Modern Web Development",
-        "subtitle": "Understanding domains, technologies, and user experience",
-        "authors": ["Dino Esposito"],
-        "publisher": "Microsoft Press",
-        "publishedDate": "2016-02-15",
-        "description": "Master powerful new approaches to web architecture, design, and user experience. This book presents a pragmatic, up-to-date view of web development challenges and solutions.",
-        "pageCount": 400,
+        "title": "Write Modern Web Apps with the MEAN Stack",
+        "authors": ["Jeff Dickey"],
+        "publisher": "Pearson Education",
+        "publishedDate": "2014-09-01",
+        "description": "This has resulted in heavy projects that are difficult to manage and scale. This book will explain a new way to write web applications by treating the front-end as if it were a third-party mobile client.",
+        "language": "en",
+        "printType": "BOOK",
         "imageLinks": {
           "thumbnail": "https://books.google.com/books/content?id=yN_cCwAAQBAJ&printsec=frontcover&img=1&zoom=1"
         },
-        "previewLink": "https://play.google.com/books/reader?id=yN_cCwAAQBAJ"
-      }
-    },
-    {
-      "id": "p1v6DwAAQBAJ",
-      "volumeInfo": {
-        "title": "Eloquent JavaScript, 3rd Edition",
-        "subtitle": "A Modern Introduction to Programming",
-        "authors": ["Marijn Haverbeke"],
-        "publisher": "No Starch Press",
-        "publishedDate": "2018-12-04",
-        "description": "Completely revised and updated, this best-selling introduction to programming in JavaScript focuses on writing real applications. JavaScript lies at the heart of almost every modern web application.",
-        "pageCount": 472,
-        "imageLinks": {
-          "thumbnail": "https://books.google.com/books/content?id=p1v6DwAAQBAJ&printsec=frontcover&img=1&zoom=1"
-        },
-        "previewLink": "https://play.google.com/books/reader?id=p1v6DwAAQBAJ"
-      }
-    },
-    {
-      "id": "PT1wDwAAQBAJ",
-      "volumeInfo": {
-        "title": "Responsive Web Design with HTML5 and CSS",
-        "subtitle": "Develop future-proof responsive websites using the latest HTML5 and CSS techniques",
-        "authors": ["Ben Frain"],
-        "publisher": "Packt Publishing Ltd",
-        "publishedDate": "2020-04-30",
-        "description": "Publisher note: To make use of the most recent CSS and HTML features, a new, fully revised fourth edition of this book is now available, updated for 2022.",
-        "pageCount": 434,
-        "imageLinks": {
-          "thumbnail": "https://books.google.com/books/content?id=PT1wDwAAQBAJ&printsec=frontcover&img=1&zoom=1"
-        },
-        "previewLink": "https://play.google.com/books/reader?id=PT1wDwAAQBAJ"
-      }
-    },
-    {
-      "id": "8Gz4AgAAQBAJ",
-      "volumeInfo": {
-        "title": "Smashing Node.js",
-        "subtitle": "JavaScript Everywhere",
-        "authors": ["Guillermo Rauch"],
-        "publisher": "John Wiley & Sons",
-        "publishedDate": "2012-08-14",
-        "description": "Learn to make more efficient apps, with just one language! Smashing Node.js: JavaScript Everywhere equips you with the necessary tools to understand Node.js and its uses in developing efficient, scalable web applications.",
-        "pageCount": 312,
-        "imageLinks": {
-          "thumbnail": "https://books.google.com/books/content?id=8Gz4AgAAQBAJ&printsec=frontcover&img=1&zoom=1"
-        },
-        "previewLink": "https://play.google.com/books/reader?id=8Gz4AgAAQBAJ"
-      }
-    },
-    {
-      "id": "9H6xDwAAQBAJ",
-      "volumeInfo": {
-        "title": "CSS: The Missing Manual",
-        "subtitle": "Beautiful styling for the web",
-        "authors": ["David Sawyer McFarland"],
-        "publisher": "O'Reilly Media",
-        "publishedDate": "2015-08-13",
-        "description": "CSS lets you create professional-looking websites, but learning its finer points can be tricky. This fully updated edition provides the most modern and effective tips, tricks, and tutorial-based instruction.",
-        "pageCount": 718,
-        "imageLinks": {
-          "thumbnail": "https://books.google.com/books/content?id=9H6xDwAAQBAJ&printsec=frontcover&img=1&zoom=1"
-        },
-        "previewLink": "https://play.google.com/books/reader?id=9H6xDwAAQBAJ"
-      }
-    },
-    {
-      "id": "N1GMAgAAQBAJ",
-      "volumeInfo": {
-        "title": "High Performance Web Sites",
-        "subtitle": "Essential Knowledge for Front-End Engineers",
-        "authors": ["Steve Souders"],
-        "publisher": "O'Reilly Media",
-        "publishedDate": "2007-09-11",
-        "description": "Want your web site to display more quickly? This book presents 14 specific rules that will cut 25% to 50% off response time when users request a page.",
-        "pageCount": 170,
-        "imageLinks": {
-          "thumbnail": "https://books.google.com/books/content?id=N1GMAgAAQBAJ&printsec=frontcover&img=1&zoom=1"
-        },
-        "previewLink": "https://play.google.com/books/reader?id=N1GMAgAAQBAJ"
-      }
-    },
-    {
-      "id": "Vl_lBQAAQBAJ",
-      "volumeInfo": {
-        "title": "HTML5: Up and Running",
-        "subtitle": "Dive into the Future of Web Development",
-        "authors": ["Mark Pilgrim"],
-        "publisher": "O'Reilly Media",
-        "publishedDate": "2010-08-06",
-        "description": "If you do not know about the new features available in HTML5, now is the time to find out. This book provides practical information about how and why the latest version of this markup language is significantly changing the way you develop for the Web.",
-        "pageCount": 224,
-        "imageLinks": {
-          "thumbnail": "https://books.google.com/books/content?id=Vl_lBQAAQBAJ&printsec=frontcover&img=1&zoom=1"
-        },
-        "previewLink": "https://play.google.com/books/reader?id=Vl_lBQAAQBAJ"
+        "previewLink": "https://play.google.com/books/reader?id=yN_cCwAAQBAJ",
+        "infoLink": "https://play.google.com/store/books/details?id=yN_cCwAAQBAJ",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=yN_cCwAAQBAJ"
+      },
+      "accessInfo": {
+        "webReaderLink": "http://play.google.com/books/reader?id=yN_cCwAAQBAJ"
       }
     }
   ]

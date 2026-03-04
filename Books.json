@@ -1,15 +1,50 @@
 {
   "kind": "books#volume",
   "id": "Wfan6L9RGgYC",
+  "selfLink": "https://www.googleapis.com/books/v1/volumes/Wfan6L9RGgYC",
   "volumeInfo": {
-    "title": "Lead Like a Marine",
-    "authors": ["John Lasseter", "Christopher J. Michel"],
-    "publisher": "Penguin",
-    "publishedDate": "2021-06-08",
-    "description": "A leadership book detailing principles from the Marines to help you succeed in business and life. It covers strategy, discipline, and building a cohesive team.",
-    "pageCount": 256,
+    "title": "The Modern Web",
+    "subtitle": "Multi-device Web Development with HTML5, CSS3, and JavaScript",
+    "authors": ["Peter Gasston"],
+    "publisher": "No Starch Press",
+    "publishedDate": "2013",
+    "description": "A Guide to Modern Web Development. Today's web technologies are evolving at near-light speed, bringing the promise of a seamless Internet ever closer to reality. When users can browse the Web on a three-inch phone screen as easily as on a fifty-inch HDTV, what's a developer to do? Peter Gasston's The Modern Web will guide you through the latest and most important tools of device-agnostic web development, including HTML5, CSS3, and JavaScript. His plain-English explanations and practical examples emphasize the techniques, principles, and practices that you'll need to easily transcend individual browser quirks and stay relevant as these technologies are updated.\n\nLearn how to:\n* Plan your content so that it displays fluidly across multiple devices\n* Design websites to interact with devices using the most up-to-date APIs, including Geolocation, Orientation, and Web Storage\n* Incorporate cross-platform audio and video without using troublesome plug-ins\n* Make images and graphics scalable on high-resolution devices with SVG\n\nUse powerful HTML5 elements to design better forms. Turn outdated websites into flexible, user-friendly ones that take full advantage of the unique capabilities of any device or browser. With the help of The Modern Web, you'll be ready to navigate the front lines of device-independent development.",
+    "pageCount": 264,
+    "printType": "BOOK",
+    "categories": [
+      "Computers / Web / Design",
+      "Computers / Software Development & Engineering / General",
+      "Computers / Programming Languages / JavaScript",
+      "Computers / Programming Languages / HTML",
+      "Computers / Web / Web Programming"
+    ],
+    "averageRating": 5,
+    "ratingsCount": 2,
+    "maturityRating": "NOT_MATURE",
+    "language": "en",
+    "industryIdentifiers": [
+      { "type": "ISBN_10", "identifier": "1593274874" },
+      { "type": "ISBN_13", "identifier": "9781593274870" }
+    ],
     "imageLinks": {
-      "thumbnail": "https://books.google.com/books/publisher/content?id=1mIDEAAAQBAJ&printsec=frontcover&img=1&zoom=1"
-    }
+      "thumbnail": "https://books.google.com/books/content?id=Wfan6L9RGgYC&printsec=frontcover&img=1&zoom=1"
+    },
+    "infoLink": "https://play.google.com/store/books/details?id=Wfan6L9RGgYC",
+    "canonicalVolumeLink": "https://play.google.com/store/books/details?id=Wfan6L9RGgYC"
+  },
+  "saleInfo": {
+    "country": "US",
+    "saleability": "NOT_FOR_SALE",
+    "isEbook": false
+  },
+  "accessInfo": {
+    "country": "US",
+    "viewability": "PARTIAL",
+    "embeddable": true,
+    "publicDomain": false,
+    "textToSpeechPermission": "ALLOWED",
+    "epub": { "isAvailable": true },
+    "pdf": { "isAvailable": true },
+    "webReaderLink": "http://play.google.com/books/reader?id=Wfan6L9RGgYC"
   }
 }

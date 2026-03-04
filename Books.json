@@ -1,0 +1,15 @@
+{
+  "kind": "books#volume",
+  "id": "Wfan6L9RGgYC",
+  "volumeInfo": {
+    "title": "Lead Like a Marine",
+    "authors": ["John Lasseter", "Christopher J. Michel"],
+    "publisher": "Penguin",
+    "publishedDate": "2021-06-08",
+    "description": "A leadership book detailing principles from the Marines to help you succeed in business and life. It covers strategy, discipline, and building a cohesive team.",
+    "pageCount": 256,
+    "imageLinks": {
+      "thumbnail": "https://books.google.com/books/publisher/content?id=1mIDEAAAQBAJ&printsec=frontcover&img=1&zoom=1"
+    }
+  }
+}

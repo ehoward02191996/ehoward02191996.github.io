@@ -1,0 +1,38 @@
+{
+  "kind": "books#volumes",
+  "items": [
+    {
+      "volumeInfo": {
+        "title": "Modern Web Development",
+        "authors": ["Dino Esposito"],
+        "publishedDate": "2016",
+        "description": "A comprehensive guide to building modern web applications using the latest frameworks and practices.",
+        "imageLinks": {
+          "thumbnail": "https://books.google.com/books/content?id=yN_cCwAAQBAJ&printsec=frontcover&img=1&zoom=1"
+        }
+      }
+    },
+    {
+      "volumeInfo": {
+        "title": "Learning Web Design",
+        "authors": ["Jennifer Robbins"],
+        "publishedDate": "2018",
+        "description": "A beginner's guide to HTML, CSS, JavaScript, and web graphics.",
+        "imageLinks": {
+          "thumbnail": "https://books.google.com/books/content?id=OP1sDwAAQBAJ&printsec=frontcover&img=1&zoom=1"
+        }
+      }
+    },
+    {
+      "volumeInfo": {
+        "title": "JavaScript: The Definitive Guide",
+        "authors": ["David Flanagan"],
+        "publishedDate": "2020",
+        "description": "The essential reference for modern JavaScript programming.",
+        "imageLinks": {
+          "thumbnail": "https://books.google.com/books/content?id=NPbkDwAAQBAJ&printsec=frontcover&img=1&zoom=1"
+        }
+      }
+    }
+  ]
+}

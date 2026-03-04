@@ -59,10 +59,8 @@
 
     <script>
         $(document).ready(function() {
-            // Replaced the local JSON with the live Google API endpoint
-            const apiUrl = "https://www.googleapis.com/books/v1/volumes/Wfan6L9RGgYC";
-
-            $.getJSON(apiUrl, function(data) {
+            // Pointing directly to your local JSON file in the repository
+            $.getJSON("Books.json", function(data) {
                 const info = data.volumeInfo;
                 $("#title").text(info.title);
                 $("#author").text(info.authors ? info.authors.join(", ") : "Unknown Author");
@@ -75,8 +73,8 @@
                 $("#cover").attr("src", imgUrl).removeClass("hidden");
                 
             }).fail(function() {
-                $("#title").text("API Error");
-                $("#description").text("Could not fetch data from Google Books API.");
+                $("#title").text("Error Loading Data");
+                $("#description").text("Could not read Books.json. Make sure the file has valid JSON text inside it!");
             });
         });
     </script>

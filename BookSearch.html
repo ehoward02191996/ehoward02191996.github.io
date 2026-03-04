@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Search - Eric Howard</title>
+    <title>Book Search List - Eric Howard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
@@ -14,107 +14,105 @@
         .animate-pulse-slow { animation: pulse-slow 8s infinite; }
     </style>
 </head>
-<body class="bg-black text-white min-h-screen font-sans flex flex-col">
+<body class="bg-black text-white min-h-screen font-sans">
     <div class="fixed inset-0 overflow-hidden pointer-events-none">
         <div class="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-pink-500/20 rounded-full blur-[120px] animate-pulse-slow"></div>
         <div class="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[120px] animate-pulse-slow" style="animation-delay: 2s;"></div>
     </div>
 
-    <div class="relative z-10 p-6 md:p-10 max-w-6xl mx-auto w-full flex-grow flex flex-col">
+    <div class="relative z-10 p-6 md:p-10 max-w-5xl mx-auto flex flex-col min-h-screen">
         <a href="Project.html" class="text-pink-400 hover:text-pink-300 transition-colors mb-6 inline-block font-medium">← Back to Projects</a>
         
-        <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-400 to-blue-600 bg-clip-text text-transparent mb-8">
-            Live Google Books Search
-        </h1>
+        <header class="mb-10 text-center md:text-left border-b border-white/10 pb-6">
+            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-pink-400 to-blue-600 bg-clip-text text-transparent mb-3">
+                Book Search List
+            </h1>
+            <p class="text-gray-400 italic">
+                Search query: "Modern Web" — Source: SearchBook.json
+            </p>
+        </header>
 
-        <div class="mb-10 flex gap-4 max-w-2xl">
-            <input type="text" id="search-input" placeholder="Search for any book, author, or topic..." class="flex-grow p-4 rounded-xl bg-gray-900/80 border border-pink-500/30 text-white focus:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-500/20 transition-all text-lg">
-            <button id="search-btn" class="px-8 py-4 bg-gradient-to-r from-pink-600 to-blue-600 rounded-xl font-bold hover:opacity-90 transition-opacity shadow-lg shadow-pink-500/20">
-                Search
-            </button>
-        </div>
+        <p id="results-count" class="text-gray-300 mb-6 font-medium">Loading results...</p>
 
-        <main id="results-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 flex-grow">
-            <div class="col-span-full text-center text-gray-400 italic mt-10 text-lg">
-                Type a keyword above to search the live Google Books database.
-            </div>
+        <main id="results-list" class="flex flex-col gap-8 flex-grow">
+            <div id="loading-msg" class="text-center text-pink-400 italic animate-pulse">Fetching search results...</div>
         </main>
 
-        <footer class="py-10 text-center text-gray-500 mt-auto pt-10">
+        <footer class="py-10 text-center text-gray-500 mt-10">
             <p>© 2026 IT 4403 Course Project</p>
         </footer>
     </div>
 
     <script>
         $(document).ready(function() {
-            function fetchBooks(searchTerm) {
-                // Show loading state
-                $("#results-grid").html('<div class="col-span-full text-center text-pink-400 italic animate-pulse text-xl mt-10">Searching the globe for "' + searchTerm + '"...</div>');
+            // Revert to pulling from the local JSON file
+            $.getJSON("SearchBook.json", function(data) {
+                
+                // Clear the loading message
+                $("#results-list").empty();
 
-                // Query the LIVE Google Books API
-                const apiUrl = "https://www.googleapis.com/books/v1/volumes?q=" + encodeURIComponent(searchTerm) + "&maxResults=12";
+                // Update the "Showing X of Y results" text
+                if (data.items) {
+                    $("#results-count").text(`Showing ${data.items.length} of ${data.totalItems || data.items.length} total results.`);
+                } else {
+                    $("#results-count").text("No results found.");
+                    return;
+                }
 
-                $.getJSON(apiUrl, function(data) {
-                    $("#results-grid").empty();
+                // Loop through the items
+                $.each(data.items, function(i, item) {
+                    const info = item.volumeInfo;
+                    
+                    // Fallbacks for missing data
+                    let thumb = info.imageLinks ? info.imageLinks.thumbnail : "https://via.placeholder.com/150x200?text=No+Cover";
+                    thumb = thumb.replace("http:", "https:"); 
+                    
+                    const title = info.title || "No Title";
+                    const subtitle = info.subtitle ? `<p class="text-lg text-gray-400 italic mb-3">${info.subtitle}</p>` : "";
+                    const authors = info.authors ? info.authors.join(", ") : "N/A";
+                    const publisher = info.publisher || "N/A";
+                    const publishedDate = info.publishedDate || "N/A";
+                    const pages = info.pageCount || "N/A";
+                    const desc = info.description || "No description available.";
+                    const preview = info.previewLink || "#";
+                    
+                    // Detailed Horizontal Card Template
+                    const cardHtml = `
+                        <div class="bg-gray-900/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 md:p-8 shadow-xl hover:border-pink-500/30 transition-all flex flex-col md:flex-row gap-8">
+                            
+                            <div class="flex-shrink-0 mx-auto md:mx-0">
+                                <img src="${thumb}" alt="Book Cover" class="w-32 md:w-40 object-cover rounded-lg shadow-lg shadow-black/50 border border-white/10">
+                            </div>
 
-                    if (!data.items) {
-                        $("#results-grid").html('<div class="col-span-full text-center text-red-400 text-xl mt-10">No books found for this search. Try another keyword.</div>');
-                        return;
-                    }
-
-                    // Loop through live API results
-                    $.each(data.items, function(i, item) {
-                        const info = item.volumeInfo;
-                        // Google Books uses HTTP, we force HTTPS to avoid security warnings
-                        let thumb = info.imageLinks ? info.imageLinks.thumbnail : "https://via.placeholder.com/128x192?text=No+Cover";
-                        thumb = thumb.replace("http:", "https:"); 
-                        
-                        const authors = info.authors ? info.authors.join(", ") : "Unknown Author";
-                        const desc = info.description ? info.description.substring(0, 120) + "..." : "No description available for this title.";
-                        
-                        const cardHtml = `
-                            <div class="group bg-gray-900/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-xl hover:border-pink-500/50 hover:bg-white/5 transition-all hover:-translate-y-1 flex flex-col h-full">
-                                <div class="flex gap-4 mb-4">
-                                    <img src="${thumb}" alt="Cover" class="w-24 h-36 object-cover rounded-md shadow-md shadow-black/50 border border-white/10">
-                                    <div>
-                                        <h3 class="text-xl font-bold text-white leading-tight group-hover:text-pink-300 transition-colors mb-2">${info.title}</h3>
-                                        <p class="text-sm text-pink-400 font-medium italic mb-1">${authors}</p>
-                                        <p class="text-xs text-gray-500">${info.publishedDate || "N/A"}</p>
-                                    </div>
+                            <div class="flex-grow flex flex-col justify-start">
+                                <h2 class="text-2xl font-bold text-white mb-1">${title}</h2>
+                                ${subtitle}
+                                
+                                <div class="space-y-1 text-sm text-gray-300 mb-4">
+                                    <p><strong class="text-gray-100 font-semibold w-20 inline-block">Author(s):</strong> ${authors}</p>
+                                    <p><strong class="text-gray-100 font-semibold w-20 inline-block">Publisher:</strong> ${publisher}</p>
+                                    <p><strong class="text-gray-100 font-semibold w-20 inline-block">Published:</strong> ${publishedDate}</p>
+                                    <p><strong class="text-gray-100 font-semibold w-20 inline-block">Pages:</strong> ${pages}</p>
                                 </div>
-                                <div class="text-sm text-gray-300 flex-grow">
-                                    <p>${desc}</p>
+
+                                <div class="border-l-4 border-pink-500/70 pl-4 py-1 mb-6">
+                                    <p class="text-gray-400 text-sm leading-relaxed">${desc}</p>
                                 </div>
-                                <div class="mt-4 pt-4 border-t border-white/10">
-                                    <a href="SingleBook.html?id=${item.id}" class="block text-center w-full py-3 bg-pink-600/20 hover:bg-pink-600/40 text-pink-300 rounded-lg text-sm font-semibold transition-colors">
-                                        View Full Details
+                                
+                                <div class="mt-auto pt-2">
+                                    <a href="${preview}" target="_blank" class="inline-block px-6 py-2 bg-pink-600/20 hover:bg-pink-600/40 border border-pink-500/50 text-pink-300 rounded text-sm font-semibold transition-colors">
+                                        Preview on Google Books
                                     </a>
                                 </div>
                             </div>
-                        `;
-                        $("#results-grid").append(cardHtml);
-                    });
-                }).fail(function() {
-                    $("#results-grid").html('<div class="col-span-full text-center text-red-500 mt-10">Error connecting to Google Books API. Please check your internet or adblocker.</div>');
+
+                        </div>
+                    `;
+                    $("#results-list").append(cardHtml);
                 });
-            }
-
-            // Trigger search on button click
-            $("#search-btn").click(function() {
-                const term = $("#search-input").val();
-                if (term) fetchBooks(term);
+            }).fail(function() {
+                $("#results-list").html('<div class="text-center text-red-500">Error: Could not load SearchBook.json. Please check your GitHub repository files.</div>');
             });
-
-            // Trigger search on Enter key
-            $("#search-input").keypress(function(e) {
-                if (e.which === 13) {
-                    const term = $("#search-input").val();
-                    if (term) fetchBooks(term);
-                }
-            });
-            
-            // Run a default search on load
-            fetchBooks("Lead Like a Marine");
         });
     </script>
 </body>

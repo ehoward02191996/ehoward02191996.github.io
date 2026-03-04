@@ -13,30 +13,60 @@
         .animate-pulse-slow { animation: pulse-slow 8s infinite; }
     </style>
 </head>
-<body class="bg-black text-white min-h-screen font-sans">
+<body class="bg-black text-white min-h-screen font-sans flex flex-col">
     <div class="fixed inset-0 overflow-hidden pointer-events-none">
         <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[120px] animate-pulse-slow"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[120px] animate-pulse-slow"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[120px] animate-pulse-slow" style="animation-delay: 2s;"></div>
     </div>
 
-    <div class="relative z-10 p-10 max-w-4xl mx-auto">
-        <a href="index.html" class="text-purple-400 hover:text-purple-300 transition-colors">← Back to Home</a>
+    <div class="relative z-10 p-6 md:p-10 max-w-4xl mx-auto w-full flex-grow">
+        <a href="index.html" class="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors mb-8 font-medium">
+            <span>←</span> Back to Home
+        </a>
         
-        <h1 class="text-5xl font-bold mt-6 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
-            Individual Project
-        </h1>
+        <header class="mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent mb-4">
+                Individual Project
+            </h1>
+            <p class="text-gray-400 text-lg">
+                Tracking my progress through the multi-milestone single-page application (SPA) build.
+            </p>
+        </header>
 
-        <p class="mt-4 text-gray-400 max-w-2xl">
-            This project focuses on building a single-page application that processes JSON data and displays it using JavaScript and jQuery.
-        </p>
-
-        <div class="mt-10 p-8 border border-white/10 rounded-3xl bg-gray-900/60 backdrop-blur-xl">
-            <h2 class="text-2xl font-semibold mb-6 text-white flex items-center">
-                <span class="mr-3 p-2 bg-purple-500/20 rounded-lg text-purple-400 text-sm">M1</span>
-                Milestone 1: JSON Data Integration
-            </h2>
+        <div class="space-y-8">
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <a href="SingleBook.html" class="group block p-6 border border-white/5 rounded-2xl bg-white/5 hover:bg-white/10 transition-all">
-                    <h3 class="text-xl font-bold text-purple-400 group-hover:text-purple-300">Single Book View</h3>
-                    <p
+            <div class="bg-gray-900/60 backdrop-blur-xl border border-blue-500/30 rounded-3xl p-8 shadow-2xl shadow-blue-500/5 transition-all hover:border-blue-500/50">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
+                        <span class="text-2xl font-bold text-blue-400">1</span>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">Milestone 1: JSON Data Integration</h2>
+                        <p class="text-sm text-gray-400 mt-1">Fetching and displaying book metadata using JavaScript and jQuery.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8 pt-6 border-t border-white/10">
+                    
+                    <a href="SingleBook.html" class="group relative flex flex-col p-6 bg-purple-900/20 border border-purple-500/30 rounded-2xl hover:bg-purple-900/40 hover:scale-[1.02] transition-all">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">📖</span>
+                            <h3 class="font-bold text-purple-300 text-lg">Single Book</h3>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-4 flex-grow">Displays detailed JSON metadata for a single volume without a loop.</p>
+                        <span class="text-xs font-mono text-purple-400/70 bg-purple-900/30 px-2 py-1 rounded inline-block self-start border border-purple-500/20">Source: Books.json</span>
+                    </a>
+
+                    <a href="BookSearch.html" class="group relative flex flex-col p-6 bg-pink-900/20 border border-pink-500/30 rounded-2xl hover:bg-pink-900/40 hover:scale-[1.02] transition-all">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="text-2xl">🔍</span>
+                            <h3 class="font-bold text-pink-300 text-lg">Search Results</h3>
+                        </div>
+                        <p class="text-sm text-gray-400 mb-4 flex-grow">Iterates through a JSON array to display multiple books using a loop.</p>
+                        <span class="text-xs font-mono text-pink-400/70 bg-pink-900/30 px-2 py-1 rounded inline-block self-start border border-pink-500/20">Source: SearchBook.json</span>
+                    </a>
+
+                </div>
+            </div>
+
+            <div class="bg-gray-900/40 backdrop-blur-xl border border-dashed border-gray-600/50 rounded-3xl p-8 flex items-center justify-center

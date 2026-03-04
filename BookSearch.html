@@ -45,13 +45,12 @@
 
     <script>
         $(document).ready(function() {
-            // Revert to pulling from the local JSON file
-            $.getJSON("SearchBook.json", function(data) {
-                
-                // Clear the loading message
+            // CACHE BUSTER: Appends a unique timestamp so the browser NEVER uses the old saved file
+            const jsonUrl = "SearchBook.json?nocache=" + new Date().getTime();
+
+            $.getJSON(jsonUrl, function(data) {
                 $("#results-list").empty();
 
-                // Update the "Showing X of Y results" text
                 if (data.items) {
                     $("#results-count").text(`Showing ${data.items.length} of ${data.totalItems || data.items.length} total results.`);
                 } else {
@@ -59,11 +58,9 @@
                     return;
                 }
 
-                // Loop through the items
                 $.each(data.items, function(i, item) {
                     const info = item.volumeInfo;
                     
-                    // Fallbacks for missing data
                     let thumb = info.imageLinks ? info.imageLinks.thumbnail : "https://via.placeholder.com/150x200?text=No+Cover";
                     thumb = thumb.replace("http:", "https:"); 
                     
@@ -76,42 +73,45 @@
                     const desc = info.description || "No description available.";
                     const preview = info.previewLink || "#";
                     
-                    // Detailed Horizontal Card Template
                     const cardHtml = `
                         <div class="bg-gray-900/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 md:p-8 shadow-xl hover:border-pink-500/30 transition-all flex flex-col md:flex-row gap-8">
-                            
                             <div class="flex-shrink-0 mx-auto md:mx-0">
                                 <img src="${thumb}" alt="Book Cover" class="w-32 md:w-40 object-cover rounded-lg shadow-lg shadow-black/50 border border-white/10">
                             </div>
-
                             <div class="flex-grow flex flex-col justify-start">
                                 <h2 class="text-2xl font-bold text-white mb-1">${title}</h2>
                                 ${subtitle}
-                                
                                 <div class="space-y-1 text-sm text-gray-300 mb-4">
                                     <p><strong class="text-gray-100 font-semibold w-20 inline-block">Author(s):</strong> ${authors}</p>
                                     <p><strong class="text-gray-100 font-semibold w-20 inline-block">Publisher:</strong> ${publisher}</p>
                                     <p><strong class="text-gray-100 font-semibold w-20 inline-block">Published:</strong> ${publishedDate}</p>
                                     <p><strong class="text-gray-100 font-semibold w-20 inline-block">Pages:</strong> ${pages}</p>
                                 </div>
-
                                 <div class="border-l-4 border-pink-500/70 pl-4 py-1 mb-6">
                                     <p class="text-gray-400 text-sm leading-relaxed">${desc}</p>
                                 </div>
-                                
                                 <div class="mt-auto pt-2">
                                     <a href="${preview}" target="_blank" class="inline-block px-6 py-2 bg-pink-600/20 hover:bg-pink-600/40 border border-pink-500/50 text-pink-300 rounded text-sm font-semibold transition-colors">
                                         Preview on Google Books
                                     </a>
                                 </div>
                             </div>
-
                         </div>
                     `;
                     $("#results-list").append(cardHtml);
                 });
-            }).fail(function() {
-                $("#results-list").html('<div class="text-center text-red-500">Error: Could not load SearchBook.json. Please check your GitHub repository files.</div>');
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                // EXTREME ERROR LOGGING
+                $("#results-list").html(`
+                    <div class="bg-red-900/30 border-l-4 border-red-500 p-6 rounded-lg text-left max-w-2xl mx-auto w-full">
+                        <h3 class="text-red-400 font-bold text-xl mb-2">Detailed Error Report:</h3>
+                        <p class="text-gray-300"><strong>Status:</strong> ${textStatus}</p>
+                        <p class="text-gray-300"><strong>Error Thrown:</strong> ${errorThrown}</p>
+                        <p class="text-gray-300"><strong>HTTP Code:</strong> ${jqXHR.status}</p>
+                        <hr class="border-red-500/30 my-4">
+                        <p class="text-sm text-gray-400">If Status is "parsererror", you missed a comma or bracket in your JSON file. If HTTP Code is "404", the file is missing from GitHub.</p>
+                    </div>
+                `);
             });
         });
     </script>

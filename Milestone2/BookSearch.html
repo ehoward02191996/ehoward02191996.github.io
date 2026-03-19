@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Details - Milestone 2</title>
+    <title>Book Search - Milestone 2</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -12,83 +12,43 @@
     <div class="bg-blob-2"></div>
 
     <nav>
-        <a href="index.html">Home (Search)</a>
-        <a href="bookshelf.html">My Bookshelf</a>
+        <a href="BookSearch.html">Home (Search)</a>
+        <a href="Bookshelf.html">My Bookshelf</a>
     </nav>
 
     <div class="container">
-        <a href="javascript:history.back()" style="color: var(--accent-blue); text-decoration: none; display: inline-block; margin-bottom: 1rem;">&larr; Back to Results</a>
         
-        <div id="loading-msg" style="text-align: center; color: var(--accent-pink); font-style: italic; font-size: 1.2rem;">
-            Loading book details...
-        </div>
-
-        <div id="book-info" style="display: none; background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid var(--card-border); border-radius: 1rem; padding: 2rem; gap: 2rem; flex-wrap: wrap;">
-            <div style="flex: 1; min-width: 200px; text-align: center;">
-                <img id="book-cover" src="" alt="Book Cover" style="max-width: 100%; border-radius: 0.5rem; box-shadow: 0 10px 15px rgba(0,0,0,0.5);">
-            </div>
+        <div id="search-section">
+            <h1>Google Books Search</h1>
             
-            <div style="flex: 2; min-width: 300px; display: flex; flex-direction: column; gap: 1rem;">
-                <h1 id="book-title" style="text-align: left; margin-bottom: 0; font-size: 2.5rem;"></h1>
-                <h3 id="book-authors" style="color: var(--text-muted); font-style: italic;"></h3>
-                
-                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                    <span style="background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 0.5rem;"><strong style="color: var(--text-main);">Publisher:</strong> <span id="book-publisher"></span></span>
-                    <span style="background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 0.5rem;"><strong style="color: var(--text-main);">Price:</strong> <span id="book-price"></span></span>
-                </div>
-
-                <div style="border-left: 4px solid var(--accent-pink); padding-left: 1rem; margin-top: 1rem;">
-                    <p id="book-description" style="line-height: 1.6; color: var(--text-muted);"></p>
-                </div>
+            <div class="search-controls">
+                <input type="text" id="search-input" placeholder="Enter keyword (e.g., HTML, Space, Cooking)">
+                <button id="search-btn">Search</button>
             </div>
+
+            <div class="pagination" id="pagination-controls">
+                <label for="page-select" style="color: #9ca3af;">Select Page:</label>
+                <select id="page-select">
+                    <option value="1">Page 1 (1-12)</option>
+                    <option value="2">Page 2 (13-24)</option>
+                    <option value="3">Page 3 (25-36)</option>
+                    <option value="4">Page 4 (37-48)</option>
+                    <option value="5">Page 5 (49-60)</option>
+                </select>
+            </div>
+
+            <div id="status-msg" style="text-align: center; color: #9ca3af; margin-bottom: 2rem;">
+                Type a keyword above to begin your search.
+            </div>
+
+            <main class="grid" id="results-grid"></main>
         </div>
-    </div>
 
-    <script>
-        $(document).ready(function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const bookId = urlParams.get('id');
+        <div id="details-section" style="display: none;">
+            <a href="BookSearch.html" style="color: var(--accent-blue); text-decoration: none; display: inline-block; margin-bottom: 1rem;">&larr; Back to Search</a>
+            
+            <div id="loading-details-msg" style="text-align: center; color: var(--accent-pink); font-style: italic; font-size: 1.2rem;">
+                Loading book details...
+            </div>
 
-            if (!bookId) {
-                $("#loading-msg").html('<span style="color: red;">Error: No Book ID provided in URL.</span>');
-                return;
-            }
-
-            const apiUrl = `https://www.googleapis.com/books/v1/volumes/${bookId}`;
-
-            $.getJSON(apiUrl, function(data) {
-                const info = data.volumeInfo;
-                const sale = data.saleInfo;
-
-                let thumb = info.imageLinks ? (info.imageLinks.medium || info.imageLinks.thumbnail) : "https://via.placeholder.com/300x450?text=No+Cover";
-                thumb = thumb.replace("http:", "https:");
-
-                const title = info.title || "Unknown Title";
-                const authors = info.authors ? info.authors.join(", ") : "Unknown Author(s)";
-                const publisher = info.publisher || "Unknown Publisher";
-                const desc = info.description || "No description available for this volume.";
-                
-                let price = "Not for Sale";
-                if (sale && sale.saleability === "FOR_SALE" && sale.listPrice) {
-                    price = `$${sale.listPrice.amount} ${sale.listPrice.currencyCode}`;
-                } else if (sale && sale.saleability === "FREE") {
-                    price = "Free / Public Domain";
-                }
-
-                $("#book-cover").attr("src", thumb);
-                $("#book-title").text(title);
-                $("#book-authors").text(`By ${authors}`);
-                $("#book-publisher").text(publisher);
-                $("#book-price").text(price);
-                $("#book-description").html(desc);
-
-                $("#loading-msg").hide();
-                $("#book-info").css("display", "flex");
-
-            }).fail(function() {
-                $("#loading-msg").html('<span style="color: red;">Error fetching book details from API.</span>');
-            });
-        });
-    </script>
-</body>
-</html>
+            <div id="book-info" style="display: none; background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid var(--card-border); border-radius: 1rem; padding: 2rem; gap: 2rem; flex-wrap: wrap;">

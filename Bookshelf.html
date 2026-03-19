@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookshelf - Milestone 2</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="bg-blob-1"></div>
+    <div class="bg-blob-2"></div>
+
+    <nav>
+        <a href="index.html">Home (Search)</a>
+        <a href="bookshelf.html">My Bookshelf</a>
+    </nav>
+
+    <div class="container">
+        <h1>My Public Bookshelf</h1>
+        
+        <div id="status-msg" style="text-align: center; color: #9ca3af; margin-bottom: 2rem;">
+            Loading books from my personal collection...
+        </div>
+
+        <main class="grid" id="bookshelf-grid"></main>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            const myBookIds = [
+                "Wfan6L9RGgYC",
+                "7vW9s-w0lT8C",
+                "OP1sDwAAQBAJ",
+                "yN_cCwAAQBAJ",
+                "p1v6DwAAQBAJ",
+                "9H6xDwAAQBAJ"
+            ];
+
+            let loadedCount = 0;
+
+            $.each(myBookIds, function(index, bookId) {
+                const apiUrl = `https://www.googleapis.com/books/v1/volumes/${bookId}`;
+
+                $.getJSON(apiUrl, function(item) {
+                    const info = item.volumeInfo;
+                    
+                    let thumb = info.imageLinks ? info.imageLinks.thumbnail : "https://via.placeholder.com/128x192?text=No+Cover";
+                    thumb = thumb.replace("http:", "https:"); 
+                    
+                    const title = info.title || "No Title";
+                    
+                    const cardHtml = `
+                        <div class="card">
+                            <img src="${thumb}" alt="Book Cover">
+                            <a href="book-details.html?id=${item.id}">${title}</a>
+                        </div>
+                    `;
+                    
+                    $("#bookshelf-grid").append(cardHtml);
+                    loadedCount++;
+
+                    if (loadedCount === myBookIds.length) {
+                        $("#status-msg").text(`Successfully loaded ${loadedCount} books from the shelf.`);
+                    }
+                }).fail(function() {
+                    console.error("Failed to load book ID: " + bookId);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

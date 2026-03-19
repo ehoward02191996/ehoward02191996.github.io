@@ -52,3 +52,140 @@
             </div>
 
             <div id="book-info" style="display: none; background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid var(--card-border); border-radius: 1rem; padding: 2rem; gap: 2rem; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 200px; text-align: center;">
+                    <img id="book-cover" src="" alt="Book Cover" style="max-width: 100%; border-radius: 0.5rem; box-shadow: 0 10px 15px rgba(0,0,0,0.5);">
+                </div>
+                
+                <div style="flex: 2; min-width: 300px; display: flex; flex-direction: column; gap: 1rem;">
+                    <h1 id="book-title" style="text-align: left; margin-bottom: 0; font-size: 2.5rem;"></h1>
+                    <h3 id="book-authors" style="color: var(--text-muted); font-style: italic;"></h3>
+                    
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <span style="background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 0.5rem;"><strong style="color: var(--text-main);">Publisher:</strong> <span id="book-publisher"></span></span>
+                        <span style="background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 0.5rem;"><strong style="color: var(--text-main);">Price:</strong> <span id="book-price"></span></span>
+                    </div>
+
+                    <div style="border-left: 4px solid var(--accent-pink); padding-left: 1rem; margin-top: 1rem;">
+                        <p id="book-description" style="line-height: 1.6; color: var(--text-muted);"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookId = urlParams.get('id');
+
+            if (bookId) {
+                $("#search-section").hide();
+                $("#details-section").show();
+                
+                const apiUrl = `https://www.googleapis.com/books/v1/volumes/${bookId}`;
+                $.getJSON(apiUrl, function(data) {
+                    const info = data.volumeInfo;
+                    const sale = data.saleInfo;
+
+                    let thumb = info.imageLinks ? (info.imageLinks.medium || info.imageLinks.thumbnail) : "https://via.placeholder.com/300x450?text=No+Cover";
+                    thumb = thumb.replace("http:", "https:");
+
+                    const title = info.title || "Unknown Title";
+                    const authors = info.authors ? info.authors.join(", ") : "Unknown Author(s)";
+                    const publisher = info.publisher || "Unknown Publisher";
+                    const desc = info.description || "No description available for this volume.";
+                    
+                    let price = "Not for Sale";
+                    if (sale && sale.saleability === "FOR_SALE" && sale.listPrice) {
+                        price = `$${sale.listPrice.amount} ${sale.listPrice.currencyCode}`;
+                    } else if (sale && sale.saleability === "FREE") {
+                        price = "Free / Public Domain";
+                    }
+
+                    $("#book-cover").attr("src", thumb);
+                    $("#book-title").text(title);
+                    $("#book-authors").text(`By ${authors}`);
+                    $("#book-publisher").text(publisher);
+                    $("#book-price").text(price);
+                    $("#book-description").html(desc);
+
+                    $("#loading-details-msg").hide();
+                    $("#book-info").css("display", "flex");
+                }).fail(function() {
+                    $("#loading-details-msg").html('<span style="color: red;">Error fetching book details.</span>');
+                });
+            } else {
+                $("#search-section").show();
+                $("#details-section").hide();
+
+                let currentSearchTerm = "";
+                const itemsPerPage = 12;
+
+                function fetchBooks(searchTerm, pageNumber) {
+                    $("#status-msg").text(`Searching Google Books for "${searchTerm}"...`);
+                    $("#results-grid").empty();
+                    
+                    const startIndex = (pageNumber - 1) * itemsPerPage;
+                    const apiUrl = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchTerm)}&startIndex=${startIndex}&maxResults=${itemsPerPage}`;
+
+                    $.getJSON(apiUrl, function(data) {
+                        if (!data.items || data.items.length === 0) {
+                            $("#status-msg").text("No books found. Try another search.");
+                            return;
+                        }
+
+                        $("#status-msg").text(`Showing page ${pageNumber} for "${searchTerm}".`);
+                        $("#pagination-controls").css("display", "flex");
+
+                        $.each(data.items, function(i, item) {
+                            const info = item.volumeInfo;
+                            const currentId = item.id;
+                            
+                            let thumb = info.imageLinks ? info.imageLinks.thumbnail : "https://via.placeholder.com/128x192?text=No+Cover";
+                            thumb = thumb.replace("http:", "https:"); 
+                            
+                            const title = info.title || "No Title Available";
+                            
+                            const cardHtml = `
+                                <div class="card">
+                                    <img src="${thumb}" alt="Book Cover">
+                                    <a href="BookSearch.html?id=${currentId}">${title}</a>
+                                </div>
+                            `;
+                            $("#results-grid").append(cardHtml);
+                        });
+                    }).fail(function() {
+                        $("#status-msg").text("Error connecting to Google Books API.");
+                    });
+                }
+
+                $("#search-btn").click(function() {
+                    currentSearchTerm = $("#search-input").val().trim();
+                    if (currentSearchTerm) {
+                        $("#page-select").val("1");
+                        fetchBooks(currentSearchTerm, 1);
+                    }
+                });
+
+                $("#search-input").keypress(function(e) {
+                    if (e.which === 13) {
+                        currentSearchTerm = $("#search-input").val().trim();
+                        if (currentSearchTerm) {
+                            $("#page-select").val("1");
+                            fetchBooks(currentSearchTerm, 1);
+                        }
+                    }
+                });
+
+                $("#page-select").change(function() {
+                    const selectedPage = $(this).val();
+                    if (currentSearchTerm) {
+                        fetchBooks(currentSearchTerm, selectedPage);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -17,173 +17,94 @@
     </nav>
 
     <div class="container">
-        
         <div id="search-section">
             <h1>Google Books Search</h1>
-            
             <div class="search-controls">
-                <input type="text" id="search-input" placeholder="Enter keyword (e.g., HTML, Space, Cooking)">
+                <input type="text" id="search-input" placeholder="Search...">
                 <button id="search-btn">Search</button>
             </div>
-
-            <div class="pagination" id="pagination-controls">
-                <label for="page-select" style="color: #9ca3af;">Select Page:</label>
+            <div class="pagination" id="pagination-controls" style="display:none; justify-content:center; gap:10px; margin-bottom:20px;">
+                <label>Page:</label>
                 <select id="page-select">
-                    <option value="1">Page 1 (1-12)</option>
-                    <option value="2">Page 2 (13-24)</option>
-                    <option value="3">Page 3 (25-36)</option>
-                    <option value="4">Page 4 (37-48)</option>
-                    <option value="5">Page 5 (49-60)</option>
+                    <option value="0">1</option>
+                    <option value="12">2</option>
+                    <option value="24">3</option>
+                    <option value="36">4</option>
+                    <option value="48">5</option>
                 </select>
             </div>
-
-            <div id="status-msg" style="text-align: center; color: #9ca3af; margin-bottom: 2rem;">
-                Type a keyword above to begin your search.
-            </div>
-
+            <div id="status-msg" style="text-align:center; color:#9ca3af; margin-bottom:20px;">Enter a keyword.</div>
             <main class="grid" id="results-grid"></main>
         </div>
 
-        <div id="details-section" style="display: none;">
-            <a href="BookSearch.html" style="color: var(--accent-blue); text-decoration: none; display: inline-block; margin-bottom: 1rem;">&larr; Back to Search</a>
-            
-            <div id="loading-details-msg" style="text-align: center; color: var(--accent-pink); font-style: italic; font-size: 1.2rem;">
-                Loading book details...
-            </div>
-
-            <div id="book-info" style="display: none; background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid var(--card-border); border-radius: 1rem; padding: 2rem; gap: 2rem; flex-wrap: wrap;">
-                <div style="flex: 1; min-width: 200px; text-align: center;">
-                    <img id="book-cover" src="" alt="Book Cover" style="max-width: 100%; border-radius: 0.5rem; box-shadow: 0 10px 15px rgba(0,0,0,0.5);">
-                </div>
-                
-                <div style="flex: 2; min-width: 300px; display: flex; flex-direction: column; gap: 1rem;">
-                    <h1 id="book-title" style="text-align: left; margin-bottom: 0; font-size: 2.5rem;"></h1>
-                    <h3 id="book-authors" style="color: var(--text-muted); font-style: italic;"></h3>
-                    
-                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                        <span style="background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 0.5rem;"><strong style="color: var(--text-main);">Publisher:</strong> <span id="book-publisher"></span></span>
-                        <span style="background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 0.5rem;"><strong style="color: var(--text-main);">Price:</strong> <span id="book-price"></span></span>
-                    </div>
-
-                    <div style="border-left: 4px solid var(--accent-pink); padding-left: 1rem; margin-top: 1rem;">
-                        <p id="book-description" style="line-height: 1.6; color: var(--text-muted);"></p>
-                    </div>
+        <div id="details-section" style="display:none;">
+            <button onclick="window.location.href='BookSearch.html'" style="margin-bottom:20px;">Back</button>
+            <div id="book-info" class="card" style="display:flex; flex-direction:row; text-align:left; gap:20px; padding:20px;">
+                <img id="book-cover" src="" style="width:200px; height:auto;">
+                <div>
+                    <h2 id="book-title"></h2>
+                    <p id="book-authors"></p>
+                    <p id="book-publisher"></p>
+                    <p id="book-price"></p>
+                    <hr style="margin:10px 0;">
+                    <p id="book-description"></p>
                 </div>
             </div>
         </div>
-
     </div>
 
     <script>
         $(document).ready(function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const bookId = urlParams.get('id');
+            const params = new URLSearchParams(window.location.search);
+            const bid = params.get('id');
 
-            if (bookId) {
+            if (bid) {
                 $("#search-section").hide();
                 $("#details-section").show();
-                
-                const apiUrl = `https://www.googleapis.com/books/v1/volumes/${bookId}`;
-                $.getJSON(apiUrl, function(data) {
-                    const info = data.volumeInfo;
-                    const sale = data.saleInfo;
-
-                    let thumb = info.imageLinks ? (info.imageLinks.medium || info.imageLinks.thumbnail) : "https://via.placeholder.com/300x450?text=No+Cover";
-                    thumb = thumb.replace("http:", "https:");
-
-                    const title = info.title || "Unknown Title";
-                    const authors = info.authors ? info.authors.join(", ") : "Unknown Author(s)";
-                    const publisher = info.publisher || "Unknown Publisher";
-                    const desc = info.description || "No description available for this volume.";
-                    
-                    let price = "Not for Sale";
-                    if (sale && sale.saleability === "FOR_SALE" && sale.listPrice) {
-                        price = `$${sale.listPrice.amount} ${sale.listPrice.currencyCode}`;
-                    } else if (sale && sale.saleability === "FREE") {
-                        price = "Free / Public Domain";
-                    }
-
-                    $("#book-cover").attr("src", thumb);
-                    $("#book-title").text(title);
-                    $("#book-authors").text(`By ${authors}`);
-                    $("#book-publisher").text(publisher);
-                    $("#book-price").text(price);
-                    $("#book-description").html(desc);
-
-                    $("#loading-details-msg").hide();
-                    $("#book-info").css("display", "flex");
-                }).fail(function() {
-                    $("#loading-details-msg").html('<span style="color: red;">Error fetching book details.</span>');
+                $.getJSON(`https://www.googleapis.com/books/v1/volumes/${bid}`, function(d) {
+                    const v = d.volumeInfo;
+                    $("#book-cover").attr("src", v.imageLinks ? v.imageLinks.thumbnail : "");
+                    $("#book-title").text(v.title);
+                    $("#book-authors").text(v.authors ? v.authors.join(", ") : "");
+                    $("#book-publisher").text(v.publisher || "");
+                    $("#book-description").html(v.description || "");
+                    $("#book-info").show();
                 });
             } else {
-                $("#search-section").show();
-                $("#details-section").hide();
-
-                let currentSearchTerm = "";
-                const itemsPerPage = 12;
-
-                function fetchBooks(searchTerm, pageNumber) {
-                    $("#status-msg").text(`Searching Google Books for "${searchTerm}"...`);
-                    $("#results-grid").empty();
-                    
-                    const startIndex = (pageNumber - 1) * itemsPerPage;
-                    const apiUrl = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchTerm)}&startIndex=${startIndex}&maxResults=${itemsPerPage}`;
-
-                    $.getJSON(apiUrl, function(data) {
-                        if (!data.items || data.items.length === 0) {
-                            $("#status-msg").text("No books found. Try another search.");
-                            return;
-                        }
-
-                        $("#status-msg").text(`Showing page ${pageNumber} for "${searchTerm}".`);
-                        $("#pagination-controls").css("display", "flex");
-
-                        $.each(data.items, function(i, item) {
-                            const info = item.volumeInfo;
-                            const currentId = item.id;
-                            
-                            let thumb = info.imageLinks ? info.imageLinks.thumbnail : "https://via.placeholder.com/128x192?text=No+Cover";
-                            thumb = thumb.replace("http:", "https:"); 
-                            
-                            const title = info.title || "No Title Available";
-                            
-                            const cardHtml = `
-                                <div class="card">
-                                    <img src="${thumb}" alt="Book Cover">
-                                    <a href="BookSearch.html?id=${currentId}">${title}</a>
-                                </div>
-                            `;
-                            $("#results-grid").append(cardHtml);
-                        });
-                    }).fail(function() {
-                        $("#status-msg").text("Error connecting to Google Books API.");
-                    });
-                }
-
                 $("#search-btn").click(function() {
-                    currentSearchTerm = $("#search-input").val().trim();
-                    if (currentSearchTerm) {
-                        $("#page-select").val("1");
-                        fetchBooks(currentSearchTerm, 1);
-                    }
-                });
-
-                $("#search-input").keypress(function(e) {
-                    if (e.which === 13) {
-                        currentSearchTerm = $("#search-input").val().trim();
-                        if (currentSearchTerm) {
-                            $("#page-select").val("1");
-                            fetchBooks(currentSearchTerm, 1);
-                        }
-                    }
+                    searchBooks(0);
                 });
 
                 $("#page-select").change(function() {
-                    const selectedPage = $(this).val();
-                    if (currentSearchTerm) {
-                        fetchBooks(currentSearchTerm, selectedPage);
-                    }
+                    searchBooks($(this).val());
                 });
+
+                function searchBooks(index) {
+                    const q = $("#search-input").val();
+                    if(!q) return;
+                    $("#status-msg").text("Searching...");
+                    $.getJSON(`https://www.googleapis.com/books/v1/volumes?q=${q}&startIndex=${index}&maxResults=12`, function(data) {
+                        $("#results-grid").empty();
+                        if(!data.items) {
+                            $("#status-msg").text("No results.");
+                            return;
+                        }
+                        $("#pagination-controls").show();
+                        $("#status-msg").text("");
+                        $.each(data.items, function(i, item) {
+                            const v = item.volumeInfo;
+                            const img = v.imageLinks ? v.imageLinks.thumbnail : "https://via.placeholder.com/128x192";
+                            $("#results-grid").append(`
+                                <div class="card">
+                                    <img src="${img}">
+                                    <a href="BookSearch.html?id=${item.id}">${v.title}</a>
+                                </div>
+                            `);
+                        });
+                    }).fail(function() {
+                        $("#status-msg").text("Google API Limit Reached. Wait 5 minutes.");
+                    });
+                }
             }
         });
     </script>

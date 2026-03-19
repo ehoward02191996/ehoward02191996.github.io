@@ -54,6 +54,52 @@
     </div>
 
     <script>
+        async function getBooks(query, startIndex = 0) {
+            const status = document.getElementById('status-msg');
+            const grid = document.getElementById('results-grid');
+            const pagination = document.getElementById('pagination-controls');
+
+            if (!query) return;
+
+            status.innerText = "Connecting to Google...";
+            grid.innerHTML = "";
+
+            try {
+                const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&startIndex=${startIndex}&maxResults=12`);
+                
+                if (response.status === 429) {
+                    status.innerText = "Google is busy. Please wait 60 seconds and try again.";
+                    return;
+                }
+
+                const data = await response.json();
+
+                if (!data.items) {
+                    status.innerText = "No books found.";
+                    return;
+                }
+
+                status.innerText = "";
+                pagination.style.display = "flex";
+
+                data.items.forEach(item => {
+                    const v = item.volumeInfo;
+                    const img = v.imageLinks ? v.imageLinks.thumbnail.replace("http:", "https:") : "https://via.placeholder.com/128x192";
+                    const card = document.createElement('div');
+                    card.className = "card";
+                    card.innerHTML = `
+                        <img src="${img}">
+                        <a href="BookSearch.html?id=${item.id}">${v.title}</a>
+                    `;
+                    grid.appendChild(card);
+                });
+
+            } catch (error) {
+                status.innerText = "Connection failed. Check your internet.";
+                console.error(error);
+            }
+        }
+
         $(document).ready(function() {
             const params = new URLSearchParams(window.location.search);
             const bid = params.get('id');
@@ -61,50 +107,22 @@
             if (bid) {
                 $("#search-section").hide();
                 $("#details-section").show();
-                $.getJSON(`https://www.googleapis.com/books/v1/volumes/${bid}`, function(d) {
-                    const v = d.volumeInfo;
-                    $("#book-cover").attr("src", v.imageLinks ? v.imageLinks.thumbnail : "");
-                    $("#book-title").text(v.title);
-                    $("#book-authors").text(v.authors ? v.authors.join(", ") : "");
-                    $("#book-publisher").text(v.publisher || "");
-                    $("#book-description").html(v.description || "");
-                    $("#book-info").show();
-                });
-            } else {
-                $("#search-btn").click(function() {
-                    searchBooks(0);
-                });
-
-                $("#page-select").change(function() {
-                    searchBooks($(this).val());
-                });
-
-                function searchBooks(index) {
-                    const q = $("#search-input").val();
-                    if(!q) return;
-                    $("#status-msg").text("Searching...");
-                    $.getJSON(`https://www.googleapis.com/books/v1/volumes?q=${q}&startIndex=${index}&maxResults=12`, function(data) {
-                        $("#results-grid").empty();
-                        if(!data.items) {
-                            $("#status-msg").text("No results.");
-                            return;
-                        }
-                        $("#pagination-controls").show();
-                        $("#status-msg").text("");
-                        $.each(data.items, function(i, item) {
-                            const v = item.volumeInfo;
-                            const img = v.imageLinks ? v.imageLinks.thumbnail : "https://via.placeholder.com/128x192";
-                            $("#results-grid").append(`
-                                <div class="card">
-                                    <img src="${img}">
-                                    <a href="BookSearch.html?id=${item.id}">${v.title}</a>
-                                </div>
-                            `);
-                        });
-                    }).fail(function() {
-                        $("#status-msg").text("Google API Limit Reached. Wait 5 minutes.");
+                fetch(`https://www.googleapis.com/books/v1/volumes/${bid}`)
+                    .then(res => res.json())
+                    .then(d => {
+                        const v = d.volumeInfo;
+                        $("#book-cover").attr("src", v.imageLinks ? v.imageLinks.thumbnail.replace("http:", "https:") : "");
+                        $("#book-title").text(v.title);
+                        $("#book-authors").text(v.authors ? v.authors.join(", ") : "Unknown Author");
+                        $("#book-publisher").text(v.publisher || "Unknown Publisher");
+                        $("#book-description").html(v.description || "No description.");
+                        $("#book-info").show();
                     });
-                }
+            } else {
+                $("#search-btn").click(() => getBooks($("#search-input").val()));
+                $("#page-select").change(function() {
+                    getBooks($("#search-input").val(), $(this).val());
+                });
             }
         });
     </script>

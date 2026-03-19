@@ -1,43 +1,45 @@
-$(document).ready(function() {
-    const myBookIds = [
-        "Wfan6L9RGgYC",
-        "7vW9s-w0lT8C",
-        "OP1sDwAAQBAJ",
-        "yN_cCwAAQBAJ",
-        "p1v6DwAAQBAJ",
-        "9H6xDwAAQBAJ"
-    ];
-
-    let index = 0;
-
-    function loadNextBook() {
-        if (index >= myBookIds.length) {
-            $("#status-msg").text("Successfully loaded bookshelf.");
-            return;
-        }
-
-        const bookId = myBookIds[index];
-        const apiUrl = `https://www.googleapis.com/books/v1/volumes/${bookId}`;
-
-        $.getJSON(apiUrl, function(item) {
-            const v = item.volumeInfo;
-            const img = v.imageLinks ? v.imageLinks.thumbnail.replace("http:", "https:") : "https://via.placeholder.com/128x192";
-            
-            $("#bookshelf-grid").append(`
-                <div class="card">
-                    <img src="${img}">
-                    <a href="BookSearch.html?id=${item.id}">${v.title}</a>
-                </div>
-            `);
-
-            index++;
-            setTimeout(loadNextBook, 1000); 
-        }).fail(function(jqXHR) {
-            if(jqXHR.status === 429) {
-                $("#status-msg").text("Google is busy. Try again in 1 hour.");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookshelf</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="bg-blob-1"></div>
+    <div class="bg-blob-2"></div>
+    <nav>
+        <a href="BookSearch.html">Home (Search)</a>
+        <a href="Bookshelf.html">My Bookshelf</a>
+    </nav>
+    <div class="container">
+        <h1>My Public Bookshelf</h1>
+        <div id="status-msg" style="text-align: center; color: #9ca3af; margin-bottom: 2rem;">Loading...</div>
+        <main class="grid" id="bookshelf-grid"></main>
+    </div>
+    <script>
+        $(document).ready(function() {
+            const myBookIds = ["Wfan6L9RGgYC","7vW9s-w0lT8C","OP1sDwAAQBAJ","yN_cCwAAQBAJ","p1v6DwAAQBAJ","9H6xDwAAQBAJ"];
+            let index = 0;
+            function loadNextBook() {
+                if (index >= myBookIds.length) {
+                    $("#status-msg").text("Bookshelf loaded.");
+                    return;
+                }
+                $.getJSON(`https://www.googleapis.com/books/v1/volumes/${myBookIds[index]}`, function(item) {
+                    const v = item.volumeInfo;
+                    const img = v.imageLinks ? v.imageLinks.thumbnail.replace("http:", "https:") : "https://via.placeholder.com/128x192";
+                    $("#bookshelf-grid").append(`<div class="card"><img src="${img}"><a href="BookSearch.html?id=${item.id}">${v.title}</a></div>`);
+                    index++;
+                    setTimeout(loadNextBook, 500);
+                }).fail(function(jqXHR) {
+                    if(jqXHR.status === 429) { $("#status-msg").text("Google is busy."); }
+                });
             }
+            loadNextBook();
         });
-    }
-
-    loadNextBook();
-});
+    </script>
+</body>
+</html>

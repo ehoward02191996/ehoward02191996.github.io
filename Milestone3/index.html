@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Explorer SPA</title>
+    <title>CineSearch SPA</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -12,43 +12,43 @@
     <div class="bg-blob-2"></div>
 
     <nav>
-        <button id="nav-search">Search Books</button>
-        <button id="nav-shelf">My Bookshelf</button>
+        <button id="nav-search">Search Movies</button>
+        <button id="nav-popular">Popular Movies</button>
     </nav>
 
     <div class="container">
         <section id="search-ui">
-            <h1>Search Google Books</h1>
+            <h1>Movie Explorer</h1>
             <div class="search-controls">
-                <input type="text" id="query" placeholder="Search for books...">
+                <input type="text" id="query" placeholder="Search for a movie...">
                 <button id="exec-search">Search</button>
             </div>
             
             <div id="page-nav" style="display:none; justify-content:center; gap:10px; margin-bottom:20px;">
-                <button class="pg-btn" data-page="0">1</button>
-                <button class="pg-btn" data-page="10">2</button>
-                <button class="pg-btn" data-page="20">3</button>
-                <button class="pg-btn" data-page="30">4</button>
-                <button class="pg-btn" data-page="40">5</button>
+                <button class="pg-btn" data-page="1">1</button>
+                <button class="pg-btn" data-page="2">2</button>
+                <button class="pg-btn" data-page="3">3</button>
+                <button class="pg-btn" data-page="4">4</button>
+                <button class="pg-btn" data-page="5">5</button>
             </div>
         </section>
 
-        <section id="shelf-ui" style="display:none;">
-            <h1>My Collection</h1>
+        <section id="popular-ui" style="display:none;">
+            <h1>Trending Now</h1>
         </section>
 
         <div id="main-display">
-            <div id="status"></div>
+            <div id="status" style="text-align:center; color:#3b82f6; margin-bottom:20px;"></div>
             <div id="results-grid" class="grid"></div>
         </div>
 
-        <section id="details-view" style="display:none; margin-top:40px; padding:20px; background:rgba(255,255,255,0.05); border-radius:15px;">
+        <section id="details-view" style="display:none; margin-top:40px; padding:30px; background:rgba(255,255,255,0.05); border-radius:20px; border: 1px solid rgba(59, 130, 246, 0.3);">
             <div style="display:flex; gap:30px; flex-wrap:wrap;">
-                <img id="det-img" src="" style="width:200px; border-radius:10px;">
+                <img id="det-img" src="" style="width:300px; border-radius:15px; box-shadow: 0 20px 25px rgba(0,0,0,0.5);">
                 <div style="flex:1; min-width:300px;">
-                    <h2 id="det-title"></h2>
-                    <p id="det-author" style="color: #ec4899; margin-bottom:10px;"></p>
-                    <p id="det-desc" style="line-height:1.6; color:#9ca3af;"></p>
+                    <h2 id="det-title" style="font-size:2.5rem; margin-bottom:5px;"></h2>
+                    <p id="det-meta" style="color: #3b82f6; font-weight:bold; margin-bottom:20px;"></p>
+                    <p id="det-desc" style="line-height:1.8; color:#9ca3af; font-size:1.1rem;"></p>
                 </div>
             </div>
         </section>
@@ -56,78 +56,104 @@
 
     <script>
         $(document).ready(function() {
-            let currentTerm = "";
-            const shelfIds = ["Wfan6L9RGgYC", "7vW9s-w0lT8C", "OP1sDwAAQBAJ", "yN_cCwAAQBAJ", "p1v6DwAAQBAJ", "9H6xDwAAQBAJ"];
+            // REPLACE THIS WITH YOUR ACTUAL KEY FROM TMDB
+            const apiKey = 'YOUR_TMDB_API_KEY_HERE'; 
+            const imgBase = "https://image.tmdb.org/t/p/w500";
 
             function showDetails(id) {
-                $("#details-view").hide();
-                $.getJSON(`https://www.googleapis.com/books/v1/volumes/${id}`, function(data) {
-                    const info = data.volumeInfo;
-                    $("#det-img").attr("src", info.imageLinks ? info.imageLinks.thumbnail : "");
-                    $("#det-title").text(info.title);
-                    $("#det-author").text(info.authors ? "By " + info.authors.join(", ") : "Unknown Author");
-                    $("#det-desc").html(info.description || "No description available.");
-                    $("#details-view").fadeIn();
-                    $('html, body').animate({ scrollTop: $("#details-view").offset().top }, 500);
+                $("#status").text("Loading movie details...");
+                $.ajax({
+                    url: `https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}`,
+                    method: 'GET',
+                    success: function(data) {
+                        const poster = data.poster_path ? imgBase + data.poster_path : "https://via.placeholder.com/300x450?text=No+Poster";
+                        
+                        $("#det-img").attr("src", poster);
+                        $("#det-title").text(data.title);
+                        $("#det-meta").text(`Release Date: ${data.release_date} | Rating: ${data.vote_average}/10`);
+                        $("#det-desc").text(data.overview || "No description available.");
+                        
+                        $("#status").text("");
+                        $("#details-view").fadeIn();
+                        $('html, body').animate({ scrollTop: $("#details-view").offset().top }, 500);
+                    }
                 });
             }
 
-            function runSearch(start) {
-                currentTerm = $("#query").val();
-                if(!currentTerm) return;
-                $("#status").text("Searching...");
+            function runSearch(page) {
+                const q = $("#query").val();
+                if(!q) return;
+
+                $("#status").text("Searching TMDB...");
                 $("#results-grid").empty();
+                $("#details-view").hide();
                 
                 $.ajax({
-                    url: `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(currentTerm)}&startIndex=${start}&maxResults=10`,
+                    url: `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(q)}&page=${page}`,
                     method: 'GET',
                     success: function(data) {
                         $("#status").text("");
                         $("#page-nav").css("display", "flex");
-                        if(!data.items) return;
-                        $.each(data.items, function(i, item) {
-                            const v = item.volumeInfo;
-                            const img = v.imageLinks ? v.imageLinks.thumbnail : "https://via.placeholder.com/128x192";
-                            const card = $(`<div class="card"><img src="${img}"><p class="book-link" data-id="${item.id}">${v.title}</p></div>`);
+                        
+                        $.each(data.results.slice(0, 10), function(i, movie) {
+                            const poster = movie.poster_path ? imgBase + movie.poster_path : "https://via.placeholder.com/180x270?text=No+Poster";
+                            const card = $(`
+                                <div class="card">
+                                    <img src="${poster}" alt="poster">
+                                    <p class="movie-link" data-id="${movie.id}">${movie.title}</p>
+                                </div>
+                            `);
                             $("#results-grid").append(card);
                         });
                     }
                 });
             }
 
-            $("#exec-search").click(() => runSearch(0));
+            $("#exec-search").click(() => runSearch(1));
             
             $(".pg-btn").click(function() {
-                $(".pg-btn").css("background", "");
-                $(this).css("background", "#ec4899");
-                runSearch($(this).data("page"));
+                $(".pg-btn").css("background", "none");
+                $(this).css("background", "#3b82f6");
+                runSearch($(this).text());
             });
 
-            $(document).on("click", ".book-link", function() {
+            $(document).on("click", ".movie-link", function() {
                 showDetails($(this).data("id"));
             });
 
-            $("#nav-shelf").click(function() {
+            $("#nav-popular").click(function() {
                 $("#search-ui, #page-nav").hide();
-                $("#shelf-ui").show();
+                $("#popular-ui").show();
                 $("#results-grid").empty();
-                $("#status").text("Loading Shelf...");
+                $("#details-view").hide();
+                $("#status").text("Loading Popular Movies...");
                 
-                shelfIds.forEach(id => {
-                    $.getJSON(`https://www.googleapis.com/books/v1/volumes/${id}`, function(item) {
-                        const v = item.volumeInfo;
-                        const card = $(`<div class="card"><img src="${v.imageLinks.thumbnail}"><p class="book-link" data-id="${item.id}">${v.title}</p></div>`);
-                        $("#results-grid").append(card);
-                    });
+                $.ajax({
+                    url: `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&page=1`,
+                    method: 'GET',
+                    success: function(data) {
+                        $.each(data.results.slice(0, 10), function(i, movie) {
+                            const poster = movie.poster_path ? imgBase + movie.poster_path : "https://via.placeholder.com/180x270?text=No+Poster";
+                            const card = $(`
+                                <div class="card">
+                                    <img src="${poster}" alt="poster">
+                                    <p class="movie-link" data-id="${movie.id}">${movie.title}</p>
+                                </div>
+                            `);
+                            $("#results-grid").append(card);
+                        });
+                        $("#status").text("");
+                    }
                 });
-                $("#status").text("");
             });
 
             $("#nav-search").click(function() {
-                $("#shelf-ui").hide();
+                $("#popular-ui").hide();
                 $("#search-ui").show();
                 $("#results-grid").empty();
+                $("#page-nav").hide();
                 $("#details-view").hide();
+                $("#status").text("");
             });
         });
     </script>

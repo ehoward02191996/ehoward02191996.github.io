@@ -25,7 +25,7 @@
             </div>
             
             <div id="page-nav" style="display:none; justify-content:center; gap:10px; margin-bottom:20px;">
-                <button class="pg-btn active" data-page="0">1</button>
+                <button class="pg-btn" data-page="0">1</button>
                 <button class="pg-btn" data-page="10">2</button>
                 <button class="pg-btn" data-page="20">3</button>
                 <button class="pg-btn" data-page="30">4</button>
@@ -62,7 +62,7 @@
             function getBookDetails(id) {
                 $("#status").text("Fetching details...");
                 $.ajax({
-                    url: `https://www.googleapis.com/books/v1/volumes/${id}?key=${myApiKey}`,
+                    url: "https://www.googleapis.com/books/v1/volumes/" + id + "?key=" + myApiKey,
                     method: 'GET',
                     success: function(data) {
                         const info = data.volumeInfo;
@@ -81,44 +81,31 @@
             function performSearch(startIndex) {
                 const term = $("#query").val();
                 if(!term) return;
-
                 $("#status").text("Searching...");
                 $("#results-grid").empty();
                 $("#details-view").hide();
-
                 $.ajax({
-                    url: `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(term)}&startIndex=${startIndex}&maxResults=10&key=${myApiKey}`,
+                    url: "https://www.googleapis.com/books/v1/volumes?q=" + encodeURIComponent(term) + "&startIndex=" + startIndex + "&maxResults=10&key=" + myApiKey,
                     method: 'GET',
                     success: function(data) {
                         $("#status").text("");
                         $("#page-nav").css("display", "flex");
-                        if(!data.items) {
-                            $("#status").text("No results found.");
-                            return;
-                        }
+                        if(!data.items) { $("#status").text("No results found."); return; }
                         $.each(data.items, function(i, item) {
                             const v = item.volumeInfo;
                             const img = v.imageLinks ? v.imageLinks.thumbnail.replace("http:", "https:") : "https://via.placeholder.com/128x192";
-                            const card = $(`
-                                <div class="card">
-                                    <img src="${img}">
-                                    <p class="book-trigger" style="color:#3b82f6; cursor:pointer; font-weight:bold;" data-id="${item.id}">${v.title}</p>
-                                </div>
-                            `);
+                            const card = $('<div class="card"><img src="' + img + '"><p class="book-trigger" style="color:#3b82f6; cursor:pointer; font-weight:bold;" data-id="' + item.id + '">' + v.title + '</p></div>');
                             $("#results-grid").append(card);
                         });
-                    },
-                    error: function() {
-                        $("#status").text("Search failed. Check API limit.");
                     }
                 });
             }
 
-            $("#exec-search").click(() => performSearch(0));
+            $("#exec-search").click(function() { performSearch(0); });
             
             $(".pg-btn").click(function() {
-                $(".pg-btn").removeClass("active").css("background", "none");
-                $(this).addClass("active").css("background", "#ec4899");
+                $(".pg-btn").css("background", "none");
+                $(this).css("background", "#ec4899");
                 performSearch($(this).data("page"));
             });
 
@@ -132,28 +119,19 @@
                 $("#results-grid").empty();
                 $("#status").text("Loading Collection...");
                 
-                const queryIds = myCollectionIds.join('+id:');
-                
-                $.ajax({
-                    url: `https://www.googleapis.com/books/v1/volumes?q=id:${queryIds}&key=${myApiKey}`,
-                    method: 'GET',
-                    success: function(data) {
-                        if (data.items) {
-                            $.each(data.items, function(i, item) {
-                                const v = item.volumeInfo;
-                                const img = v.imageLinks ? v.imageLinks.thumbnail.replace("http:", "https:") : "https://via.placeholder.com/128x192";
-                                const card = $(`
-                                    <div class="card">
-                                        <img src="${img}">
-                                        <p class="book-trigger" style="color:#3b82f6; cursor:pointer; font-weight:bold;" data-id="${item.id}">${v.title}</p>
-                                    </div>
-                                `);
-                                $("#results-grid").append(card);
-                            });
+                myCollectionIds.forEach(function(id) {
+                    $.ajax({
+                        url: "https://www.googleapis.com/books/v1/volumes/" + id + "?key=" + myApiKey,
+                        method: 'GET',
+                        success: function(item) {
+                            const v = item.volumeInfo;
+                            const img = v.imageLinks ? v.imageLinks.thumbnail.replace("http:", "https:") : "https://via.placeholder.com/128x192";
+                            const card = $('<div class="card"><img src="' + img + '"><p class="book-trigger" style="color:#3b82f6; cursor:pointer; font-weight:bold;" data-id="' + item.id + '">' + v.title + '</p></div>');
+                            $("#results-grid").append(card);
                         }
-                        $("#status").text("");
-                    }
+                    });
                 });
+                $("#status").text("");
             });
 
             $("#nav-search").click(function() {

@@ -22,16 +22,16 @@ body {
 .bg-blob-2 { bottom: -10%; left: -10%; background: var(--blue); }
 
 nav {
-    display: flex; justify-content: center; padding: 20px;
+    display: flex; justify-content: center; align-items: center; padding: 20px;
     background: rgba(0,0,0,0.4); gap: 20px;
 }
 
-nav button, .search-controls button, .pg-btn {
+nav button, .search-controls button, .nav-btn {
     background: none; border: 1px solid var(--accent); color: white;
     padding: 10px 20px; border-radius: 8px; cursor: pointer; transition: 0.3s;
 }
 
-nav button:hover, .search-controls button:hover {
+nav button:hover, .search-controls button:hover, .nav-btn:hover:not(:disabled) {
     background: var(--accent);
 }
 
@@ -46,22 +46,60 @@ input {
     background: #111; color: white; width: 300px;
 }
 
-.grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 25px;
-}
-
-.card {
-    background: var(--card); padding: 15px; border-radius: 12px;
-    text-align: center; border: 1px solid rgba(255,255,255,0.1);
-}
-
-.card img { width: 100%; border-radius: 8px; margin-bottom: 10px; }
-
-.book-link {
-    font-weight: bold; cursor: pointer; color: var(--blue);
-    font-size: 0.9rem; text-decoration: none;
-}
-
-.book-link:hover { color: var(--accent); text-decoration: underline; }
-
 #status { text-align: center; margin-bottom: 20px; font-style: italic; color: var(--accent); }
+
+.grid-view {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 25px;
+}
+
+.list-view {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.movie-card {
+    background: var(--card);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 15px;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.movie-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.grid-view .movie-card {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.grid-view .movie-card img {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.list-view .movie-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 20px;
+}
+
+.list-view .movie-card img {
+    width: 90px;
+    height: auto;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}

@@ -51,7 +51,7 @@
             </div>
             
             <div class="row justify-content-center" id="filter-controls" style="display:none;">
-                <div class="col-md-4 col-lg-3 mb-2">
+                <div class="col-md-6 col-lg-3 mb-2">
                     <select class="form-select bg-dark text-light border-secondary shadow-sm" id="sort-filter">
                         <option value="pop">Sort: Most Popular</option>
                         <option value="rating_desc">Sort: Highest Rating</option>
@@ -59,9 +59,31 @@
                         <option value="date_asc">Sort: Oldest First</option>
                     </select>
                 </div>
-                <div class="col-md-4 col-lg-3 mb-2">
+                <div class="col-md-6 col-lg-3 mb-2">
+                    <select class="form-select bg-dark text-light border-secondary shadow-sm" id="genre-filter">
+                        <option value="all">Genre: All</option>
+                        <option value="28">Action</option>
+                        <option value="16">Animation</option>
+                        <option value="35">Comedy</option>
+                        <option value="18">Drama</option>
+                        <option value="27">Horror</option>
+                        <option value="10749">Romance</option>
+                        <option value="878">Sci-Fi</option>
+                        <option value="53">Thriller</option>
+                    </select>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-2">
+                    <select class="form-select bg-dark text-light border-secondary shadow-sm" id="year-filter">
+                        <option value="all">Year: All</option>
+                        <option value="2020">2020 & Newer</option>
+                        <option value="2010">2010 - 2019</option>
+                        <option value="2000">2000 - 2009</option>
+                        <option value="1999">1999 & Older</option>
+                    </select>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-2">
                     <select class="form-select bg-dark text-light border-secondary shadow-sm" id="rating-filter">
-                        <option value="0">Rating: All Ratings</option>
+                        <option value="0">Rating: All</option>
                         <option value="6">Rating: 6.0 & Above</option>
                         <option value="7">Rating: 7.0 & Above</option>
                         <option value="8">Rating: 8.0 & Above</option>
@@ -199,10 +221,31 @@
                 
                 var minRating = parseFloat($("#rating-filter").val());
                 var sortType = $("#sort-filter").val();
+                var genreId = $("#genre-filter").val();
+                var yearRange = $("#year-filter").val();
 
                 if (minRating > 0) {
                     filteredData = filteredData.filter(function(movie) {
                         return movie.vote_average >= minRating;
+                    });
+                }
+
+                if (genreId !== "all") {
+                    var gid = parseInt(genreId);
+                    filteredData = filteredData.filter(function(movie) {
+                        return movie.genre_ids && movie.genre_ids.includes(gid);
+                    });
+                }
+
+                if (yearRange !== "all") {
+                    filteredData = filteredData.filter(function(movie) {
+                        if (!movie.release_date) return false;
+                        var year = parseInt(movie.release_date.substring(0, 4));
+                        if (yearRange === "2020") return year >= 2020;
+                        if (yearRange === "2010") return year >= 2010 && year <= 2019;
+                        if (yearRange === "2000") return year >= 2000 && year <= 2009;
+                        if (yearRange === "1999") return year <= 1999;
+                        return true;
                     });
                 }
 
@@ -274,7 +317,7 @@
                 });
             }
 
-            $("#sort-filter, #rating-filter").on("change", function() {
+            $("#sort-filter, #rating-filter, #genre-filter, #year-filter").on("change", function() {
                 applyFilters();
             });
 
@@ -313,6 +356,8 @@
                 
                 $("#sort-filter").val("pop");
                 $("#rating-filter").val("0");
+                $("#genre-filter").val("all");
+                $("#year-filter").val("all");
             });
 
             $("#nav-shelf").click(function() {
@@ -323,6 +368,8 @@
                 
                 $("#sort-filter").val("pop");
                 $("#rating-filter").val("0");
+                $("#genre-filter").val("all");
+                $("#year-filter").val("all");
                 loadPopular();
             });
         });

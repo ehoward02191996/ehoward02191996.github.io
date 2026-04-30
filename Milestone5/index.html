@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineSearch SPA - Bootstrap Edition</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.2.1/mustache.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="text-light">
+    <div class="bg-blob-1"></div>
+    <div class="bg-blob-2"></div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-secondary mb-4 shadow">
+        <div class="container">
+            <a class="navbar-brand text-primary fw-bold" href="#">🎥 CineSearch</a>
+            
+            <div class="d-flex align-items-center">
+                <span class="text-secondary me-2 d-none d-sm-inline">Layout:</span>
+                <div class="btn-group" role="group">
+                    <button type="button" id="btn-grid" class="btn btn-primary btn-sm">Grid</button>
+                    <button type="button" id="btn-list" class="btn btn-outline-primary btn-sm">List</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <ul class="nav nav-pills mb-4 justify-content-center" id="appTabs">
+            <li class="nav-item">
+                <button class="nav-link active bg-primary" id="nav-search">Search Movies</button>
+            </li>
+            <li class="nav-item ms-2">
+                <button class="nav-link text-light border border-secondary" id="nav-shelf">Popular / Trending</button>
+            </li>
+        </ul>
+
+        <div id="search-section" class="mb-4">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <div class="input-group input-group-lg shadow-sm">
+                        <input type="text" id="query" class="form-control bg-dark text-light border-secondary" placeholder="Search for movies...">
+                        <button class="btn btn-primary px-4" id="exec-search">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="status" class="text-center text-info mb-3 fw-bold"></div>
+
+        <nav id="page-nav" class="mb-4" style="display:none;">
+            <ul class="pagination justify-content-center">
+                <li class="page-item"><button id="prev-page" class="page-link bg-dark text-light border-secondary">Previous</button></li>
+                <li class="page-item disabled"><span class="page-link bg-primary text-light border-primary">Page <span id="current-page-num">1</span></span></li>
+                <li class="page-item"><button id="next-page" class="page-link bg-dark text-light border-secondary">Next</button></li>
+            </ul>
+        </nav>
+
+        <div id="details-view" class="mb-5" style="display:none;"></div>
+
+        <div id="results-container"></div>
+    </div>
+
+    <script id="movie-grid-template" type="text/template">
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4">
+            {{#results}}
+            <div class="col">
+                <div class="card h-100 bg-dark border-secondary movie-card text-white book-trigger" data-id="{{id}}">
+                    <img src="{{#poster_path}}https://image.tmdb.org/t/p/w500{{poster_path}}{{/poster_path}}{{^poster_path}}https://via.placeholder.com/500x750?text=No+Poster{{/poster_path}}" class="card-img-top" alt="{{title}}">
+                    <div class="card-body d-flex flex-column">
+                        <h6 class="card-title text-primary fw-bold">{{title}}</h6>
+                        <p class="card-text small text-muted mt-auto mb-0">⭐ {{vote_average}}/10 | {{release_date}}</p>
+                    </div>
+                </div>
+            </div>
+            {{/results}}
+        </div>
+        {{^results}}
+        <div class="alert alert-secondary text-center">No movies found.</div>
+        {{/results}}
+    </script>
+
+    <script id="movie-table-template" type="text/template">
+        {{#results.length}}
+        <div class="table-responsive bg-dark rounded border border-secondary p-2 shadow">
+            <table class="table table-dark table-hover table-striped align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 80px;">Poster</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Release Date</th>
+                        <th scope="col">Rating</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#results}}
+                    <tr class="book-trigger" data-id="{{id}}">
+                        <td>
+                            <img src="{{#poster_path}}https://image.tmdb.org/t/p/w92{{poster_path}}{{/poster_path}}{{^poster_path}}https://via.placeholder.com/92x138?text=N/A{{/poster_path}}" class="img-fluid rounded" style="width: 50px;" alt="Poster">
+                        </td>
+                        <td class="fw-bold text-primary">{{title}}</td>
+                        <td>{{release_date}}</td>
+                        <td><span class="badge bg-secondary">⭐ {{vote_average}}</span></td>
+                        <td><button class="btn btn-sm btn-outline-info">Details</button></td>
+                    </tr>
+                    {{/results}}
+                </tbody>
+            </table>
+        </div>
+        {{/results.length}}
+        {{^results.length}}
+        <div class="alert alert-secondary text-center">No movies found.</div>
+        {{/results.length}}
+    </script>
+
+    <script id="movie-detail-template" type="text/template">
+        <div class="card bg-dark border-info shadow-lg text-light">
+            <div class="row g-0">
+                <div class="col-md-4 col-lg-3">
+                    <img src="{{#poster_path}}https://image.tmdb.org/t/p/w500{{poster_path}}{{/poster_path}}{{^poster_path}}https://via.placeholder.com/500x750?text=No+Poster{{/poster_path}}" class="img-fluid rounded-start h-100 object-fit-cover" alt="Poster">
+                </div>
+                <div class="col-md-8 col-lg-9">
+                    <div class="card-body position-relative">
+                        <button type="button" id="close-details" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" aria-label="Close"></button>
+                        <h2 class="card-title text-primary fw-bold">{{title}}</h2>
+                        <h6 class="card-subtitle mb-3 text-info fst-italic">{{tagline}}</h6>
+                        
+                        <div class="mb-3">
+                            <span class="badge bg-primary me-2">⭐ {{vote_average}}/10</span>
+                            <span class="badge bg-secondary me-2">⏱️ {{runtime}} min</span>
+                            <span class="badge bg-secondary">{{release_date}}</span>
+                        </div>
+
+                        <p class="card-text">{{overview}}</p>
+                        
+                        <div class="mt-4">
+                            <strong>Genres:</strong> 
+                            {{#genres}}
+                            <span class="badge border border-secondary text-light me-1">{{name}}</span>
+                            {{/genres}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            var tmdbKey = "YOUR_TMDB_API_KEY_HERE"; 
+            var currentPage = 1;
+            var currentSearchTerm = "";
+            var currentData = []; 
+            var currentLayout = "grid"; 
+
+            function renderResults() {
+                var templateId = currentLayout === "grid" ? "#movie-grid-template" : "#movie-table-template";
+                var rawTemplate = $(templateId).html();
+                var compiledHtml = Mustache.render(rawTemplate, { results: currentData });
+                $("#results-container").html(compiledHtml);
+            }
+
+            function renderDetails(data) {
+                var rawTemplate = $("#movie-detail-template").html();
+                var compiledHtml = Mustache.render(rawTemplate, data);
+                $("#details-view").html(compiledHtml);
+                $("#details-view").fadeIn();
+                $('html, body').animate({ scrollTop: $("#details-view").offset().top - 20 }, 500);
+            }
+
+            function getMovieDetails(id) {
+                $("#status").text("Loading data...");
+                var fetchUrl = "https://api.themoviedb.org/3/movie/" + id + "?api_key=" + tmdbKey;
+                
+                $.ajax({
+                    url: fetchUrl,
+                    method: 'GET',
+                    success: function(response) {
+                        $("#status").text("");
+                        renderDetails(response);
+                    },
+                    error: function() {
+                        $("#status").text("Error pulling details.");
+                    }
+                });
+            }
+
+            function executeSearch(page) {
+                var term = $("#query").val();
+                if(term === "") return;
+                
+                currentSearchTerm = term;
+                currentPage = page;
+                
+                $("#status").text("Searching...");
+                $("#details-view").hide();
+                
+                var searchUrl = "https://api.themoviedb.org/3/search/movie?api_key=" + tmdbKey + "&query=" + encodeURIComponent(term) + "&page=" + page;
+                
+                $.ajax({
+                    url: searchUrl,
+                    method: 'GET',
+                    success: function(data) {
+                        $("#status").text("");
+                        $("#page-nav").show();
+                        $("#current-page-num").text(currentPage);
+                        
+                        if(currentPage === 1) {
+                            $("#prev-page").parent().addClass("disabled");
+                        } else {
+                            $("#prev-page").parent().removeClass("disabled");
+                        }
+                        
+                        currentData = data.results;
+                        renderResults();
+                    }
+                });
+            }
+
+            function loadPopular() {
+                $("#status").text("Loading popular movies...");
+                $("#details-view").hide();
+                $("#page-nav").hide();
+                
+                var popUrl = "https://api.themoviedb.org/3/movie/popular?api_key=" + tmdbKey + "&page=1";
+                
+                $.ajax({
+                    url: popUrl,
+                    method: 'GET',
+                    success: function(data) {
+                        $("#status").text("");
+                        currentData = data.results;
+                        renderResults();
+                    }
+                });
+            }
+
+            $("#exec-search").click(function() { executeSearch(1); });
+            
+            $("#query").keypress(function(e) {
+                if(e.which == 13) executeSearch(1);
+            });
+
+            $("#next-page").click(function() { executeSearch(currentPage + 1); });
+            $("#prev-page").click(function() { if(currentPage > 1) executeSearch(currentPage - 1); });
+
+            $(document).on("click", ".book-trigger", function() {
+                getMovieDetails($(this).data("id"));
+            });
+            
+            $(document).on("click", "#close-details", function() {
+                $("#details-view").fadeOut();
+            });
+
+            $("#btn-grid").click(function() {
+                currentLayout = "grid";
+                $(this).removeClass("btn-outline-primary").addClass("btn-primary");
+                $("#btn-list").removeClass("btn-primary").addClass("btn-outline-primary");
+                renderResults();
+            });
+
+            $("#btn-list").click(function() {
+                currentLayout = "list";
+                $(this).removeClass("btn-outline-primary").addClass("btn-primary");
+                $("#btn-grid").removeClass("btn-primary").addClass("btn-outline-primary");
+                renderResults();
+            });
+
+            $("#nav-search").click(function() {
+                $(this).addClass("active bg-primary").removeClass("text-light border border-secondary");
+                $("#nav-shelf").removeClass("active bg-primary").addClass("text-light border border-secondary");
+                
+                $("#search-section").slideDown();
+                $("#results-container").empty();
+                $("#page-nav, #details-view").hide();
+                $("#query").val("");
+                currentData = [];
+            });
+
+            $("#nav-shelf").click(function() {
+                $(this).addClass("active bg-primary").removeClass("text-light border border-secondary");
+                $("#nav-search").removeClass("active bg-primary").addClass("text-light border border-secondary");
+                
+                $("#search-section").slideUp();
+                loadPopular();
+            });
+        });
+    </script>
+</body>
+</html>

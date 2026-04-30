@@ -41,12 +41,31 @@
         </ul>
 
         <div id="search-section" class="mb-4">
-            <div class="row justify-content-center">
+            <div class="row justify-content-center mb-3">
                 <div class="col-md-8 col-lg-6">
                     <div class="input-group input-group-lg shadow-sm">
                         <input type="text" id="query" class="form-control bg-dark text-light border-secondary" placeholder="Search for movies...">
                         <button class="btn btn-primary px-4" id="exec-search">Search</button>
                     </div>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center" id="filter-controls" style="display:none;">
+                <div class="col-md-4 col-lg-3 mb-2">
+                    <select class="form-select bg-dark text-light border-secondary shadow-sm" id="sort-filter">
+                        <option value="pop">Sort: Most Popular</option>
+                        <option value="rating_desc">Sort: Highest Rating</option>
+                        <option value="date_desc">Sort: Newest First</option>
+                        <option value="date_asc">Sort: Oldest First</option>
+                    </select>
+                </div>
+                <div class="col-md-4 col-lg-3 mb-2">
+                    <select class="form-select bg-dark text-light border-secondary shadow-sm" id="rating-filter">
+                        <option value="0">Rating: All Ratings</option>
+                        <option value="6">Rating: 6.0 & Above</option>
+                        <option value="7">Rating: 7.0 & Above</option>
+                        <option value="8">Rating: 8.0 & Above</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -81,7 +100,7 @@
             {{/results}}
         </div>
         {{^results}}
-        <div class="alert alert-secondary text-center">No movies found.</div>
+        <div class="alert alert-secondary text-center shadow">No movies found matching your filters.</div>
         {{/results}}
     </script>
 
@@ -115,7 +134,7 @@
         </div>
         {{/results.length}}
         {{^results.length}}
-        <div class="alert alert-secondary text-center">No movies found.</div>
+        <div class="alert alert-secondary text-center shadow">No movies found matching your filters.</div>
         {{/results.length}}
     </script>
 
@@ -153,16 +172,17 @@
 
     <script>
         $(document).ready(function() {
-            var tmdbKey = "62f64973d12e23168dc7804762b4e18c"; 
+            var tmdbKey = "YOUR_TMDB_API_KEY_HERE"; 
             var currentPage = 1;
             var currentSearchTerm = "";
-            var currentData = []; 
+            var originalData = [];
+            var filteredData = [];
             var currentLayout = "grid"; 
 
             function renderResults() {
                 var templateId = currentLayout === "grid" ? "#movie-grid-template" : "#movie-table-template";
                 var rawTemplate = $(templateId).html();
-                var compiledHtml = Mustache.render(rawTemplate, { results: currentData });
+                var compiledHtml = Mustache.render(rawTemplate, { results: filteredData });
                 $("#results-container").html(compiledHtml);
             }
 
@@ -174,19 +194,37 @@
                 $('html, body').animate({ scrollTop: $("#details-view").offset().top - 20 }, 500);
             }
 
+            function applyFilters() {
+                filteredData = [...originalData];
+                
+                var minRating = parseFloat($("#rating-filter").val());
+                var sortType = $("#sort-filter").val();
+
+                if (minRating > 0) {
+                    filteredData = filteredData.filter(function(movie) {
+                        return movie.vote_average >= minRating;
+                    });
+                }
+
+                if (sortType === "rating_desc") {
+                    filteredData.sort((a, b) => b.vote_average - a.vote_average);
+                } else if (sortType === "date_desc") {
+                    filteredData.sort((a, b) => new Date(b.release_date) - new Date(a.release_date));
+                } else if (sortType === "date_asc") {
+                    filteredData.sort((a, b) => new Date(a.release_date) - new Date(b.release_date));
+                }
+
+                renderResults();
+            }
+
             function getMovieDetails(id) {
                 $("#status").text("Loading data...");
-                var fetchUrl = "https://api.themoviedb.org/3/movie/" + id + "?api_key=" + tmdbKey;
-                
                 $.ajax({
-                    url: fetchUrl,
+                    url: "https://api.themoviedb.org/3/movie/" + id + "?api_key=" + tmdbKey,
                     method: 'GET',
                     success: function(response) {
                         $("#status").text("");
                         renderDetails(response);
-                    },
-                    error: function() {
-                        $("#status").text("Error pulling details.");
                     }
                 });
             }
@@ -209,54 +247,44 @@
                     success: function(data) {
                         $("#status").text("");
                         $("#page-nav").show();
+                        $("#filter-controls").fadeIn();
                         $("#current-page-num").text(currentPage);
                         
-                        if(currentPage === 1) {
-                            $("#prev-page").parent().addClass("disabled");
-                        } else {
-                            $("#prev-page").parent().removeClass("disabled");
-                        }
+                        $("#prev-page").parent().toggleClass("disabled", currentPage === 1);
                         
-                        currentData = data.results;
-                        renderResults();
+                        originalData = data.results;
+                        applyFilters();
                     }
                 });
             }
 
             function loadPopular() {
                 $("#status").text("Loading popular movies...");
-                $("#details-view").hide();
-                $("#page-nav").hide();
-                
-                var popUrl = "https://api.themoviedb.org/3/movie/popular?api_key=" + tmdbKey + "&page=1";
+                $("#details-view, #page-nav").hide();
                 
                 $.ajax({
-                    url: popUrl,
+                    url: "https://api.themoviedb.org/3/movie/popular?api_key=" + tmdbKey + "&page=1",
                     method: 'GET',
                     success: function(data) {
                         $("#status").text("");
-                        currentData = data.results;
-                        renderResults();
+                        $("#filter-controls").fadeIn();
+                        originalData = data.results;
+                        applyFilters();
                     }
                 });
             }
 
-            $("#exec-search").click(function() { executeSearch(1); });
-            
-            $("#query").keypress(function(e) {
-                if(e.which == 13) executeSearch(1);
+            $("#sort-filter, #rating-filter").on("change", function() {
+                applyFilters();
             });
 
+            $("#exec-search").click(function() { executeSearch(1); });
+            $("#query").keypress(function(e) { if(e.which == 13) executeSearch(1); });
             $("#next-page").click(function() { executeSearch(currentPage + 1); });
             $("#prev-page").click(function() { if(currentPage > 1) executeSearch(currentPage - 1); });
 
-            $(document).on("click", ".book-trigger", function() {
-                getMovieDetails($(this).data("id"));
-            });
-            
-            $(document).on("click", "#close-details", function() {
-                $("#details-view").fadeOut();
-            });
+            $(document).on("click", ".book-trigger", function() { getMovieDetails($(this).data("id")); });
+            $(document).on("click", "#close-details", function() { $("#details-view").fadeOut(); });
 
             $("#btn-grid").click(function() {
                 currentLayout = "grid";
@@ -277,10 +305,14 @@
                 $("#nav-shelf").removeClass("active bg-primary").addClass("text-light border border-secondary");
                 
                 $("#search-section").slideDown();
+                $("#filter-controls").hide();
                 $("#results-container").empty();
                 $("#page-nav, #details-view").hide();
                 $("#query").val("");
-                currentData = [];
+                originalData = [];
+                
+                $("#sort-filter").val("pop");
+                $("#rating-filter").val("0");
             });
 
             $("#nav-shelf").click(function() {
@@ -288,6 +320,9 @@
                 $("#nav-search").removeClass("active bg-primary").addClass("text-light border border-secondary");
                 
                 $("#search-section").slideUp();
+                
+                $("#sort-filter").val("pop");
+                $("#rating-filter").val("0");
                 loadPopular();
             });
         });
